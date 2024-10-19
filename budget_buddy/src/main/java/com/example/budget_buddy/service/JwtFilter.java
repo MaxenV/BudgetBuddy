@@ -3,15 +3,15 @@ package com.example.budget_buddy.service;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-import jakarta.servlet.FilterChain; // Use Spring's Jakarta EE support
+import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,19 +29,16 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        // Retrieve the Authorization header
         final String authorizationHeader = request.getHeader("Authorization");
 
         String username = null;
         String jwt = null;
 
-        // Check if the header contains a token
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            jwt = authorizationHeader.substring(7); // Remove "Bearer " prefix
-            username = jwtService.extractUsername(jwt); // Extract username from the token
+            jwt = authorizationHeader.substring(7); 
+            username = jwtService.extractUsername(jwt); 
         }
 
-        // Validate the token
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
@@ -53,7 +50,6 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
 
-        // Continue the filter chain
         filterChain.doFilter(request, response);
     }
 }
