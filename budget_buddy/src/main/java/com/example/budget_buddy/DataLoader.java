@@ -19,7 +19,7 @@ public class DataLoader implements CommandLineRunner {
         User user1 = new User();
         user1.setName("John Doe");
         user1.setEmail("john@example.com");
-        user1.setPassword(passwordEncoder.encode("password123"));
+        user1.setPassword("password123");
         user1.setStatus("active");
         user1.setMessage("Hello from John!");
         userRepository.save(user1);
@@ -27,7 +27,7 @@ public class DataLoader implements CommandLineRunner {
         User user2 = new User();
         user2.setName("Jane Smith");
         user2.setEmail("jane@example.com");
-        user2.setPassword(passwordEncoder.encode("mypassword"));
+        user2.setPassword("mypassword");
         user2.setStatus("active");
         user2.setMessage("Hello from Jane!");
         userRepository.save(user2);

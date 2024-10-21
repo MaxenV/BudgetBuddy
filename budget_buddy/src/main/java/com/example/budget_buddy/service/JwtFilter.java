@@ -35,6 +35,12 @@ public class JwtFilter extends OncePerRequestFilter {
         String username = null;
         String jwt = null;
 
+        // Dodaj wyjątek dla endpointów logowania/rejestracji
+    if (request.getServletPath().startsWith("/auth")) {
+        filterChain.doFilter(request, response); // Pomiń filtrowanie dla ścieżek /auth
+        return;
+    }
+
         // Check if the header contains a token
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7); // Remove "Bearer " prefix

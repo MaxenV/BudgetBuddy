@@ -15,9 +15,9 @@ public class JwtService {
 
     private final String secretKey = "your_secret_key";
 
-    public String generateToken(String username) {
+    public String generateToken(String email) {
         return Jwts.builder()
-            .setSubject(username)
+            .setSubject(email) // Generate token with email
             .setIssuedAt(new Date())
             .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // Token valid for 10 hours
             .signWith(SignatureAlgorithm.HS256, secretKey)
@@ -29,7 +29,7 @@ public class JwtService {
             .setSigningKey(secretKey)
             .parseClaimsJws(token)
             .getBody()
-            .getSubject();
+            .getSubject(); // Return email from token
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
