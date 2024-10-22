@@ -5,6 +5,15 @@ public class RegisterRequest {
     private String username;
     private String password;
     private String email; // Opcjonalne pole, jeśli chcesz
+    private String message;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     // Konstruktor bezargumentowy
     public RegisterRequest() {
