@@ -54,7 +54,7 @@ public class AuthController {
     @PostMapping("/register")
 public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
     String encodedPassword = passwordEncoder().encode(registerRequest.getPassword());
-    // Zapisz użytkownika z zakodowanym hasłem do bazy danych
+    
     return ResponseEntity.ok("User registered successfully");
 }
 
