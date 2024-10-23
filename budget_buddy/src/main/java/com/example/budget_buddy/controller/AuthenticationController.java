@@ -1,6 +1,5 @@
-package com.example.budget_buddy;
+package com.example.budget_buddy.controller;
 
-import com.example.budget_buddy.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,7 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.budget_buddy.dto.LoginUserDto;
 import com.example.budget_buddy.dto.RegisterUserDto;
+import com.example.budget_buddy.model.User;
+import com.example.budget_buddy.service.AuthenticationService;
 import com.example.budget_buddy.service.JwtService;
+import com.example.budget_buddy.service.LoginResponse;
 
 
 

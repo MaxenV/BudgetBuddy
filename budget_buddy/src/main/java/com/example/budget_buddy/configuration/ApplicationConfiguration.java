@@ -1,4 +1,4 @@
-package com.example.budget_buddy;
+package com.example.budget_buddy.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import com.example.budget_buddy.repository.UserRepository;
 
 @Configuration
 public class ApplicationConfiguration {

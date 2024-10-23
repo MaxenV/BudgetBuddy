@@ -1,11 +1,12 @@
 package com.example.budget_buddy.service;
 
-import com.example.budget_buddy.UserRepository;
-import com.example.budget_buddy.User;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.example.budget_buddy.model.User;
+import com.example.budget_buddy.repository.UserRepository;
 
 @Service
 public class UserService {

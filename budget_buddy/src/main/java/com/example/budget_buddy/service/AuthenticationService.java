@@ -4,10 +4,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.budget_buddy.User;
-import com.example.budget_buddy.UserRepository;
 import com.example.budget_buddy.dto.LoginUserDto;
 import com.example.budget_buddy.dto.RegisterUserDto;
+import com.example.budget_buddy.model.User;
+import com.example.budget_buddy.repository.UserRepository;
 
 
 @Service
