@@ -2,80 +2,85 @@ package com.example.budget_buddy;
 
 import com.example.budget_buddy.service.LoginResponse;
 import com.example.budget_buddy.dto.LoginUserDto;
-import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import org.springframework.web.client.RestTemplate;
 
-public class LoginApplication extends Application {
+public class LoginApplication extends JFrame {
 
     private RestTemplate restTemplate = new RestTemplate();
 
-    @Override
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("BudgetBuddy - Login");
-
+    public LoginApplication() {
+        setTitle("BudgetBuddy - Login");
+        setSize(300, 200);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
         
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(25, 25, 25, 25));
-
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.insets = new Insets(10, 10, 10, 10);
         
-        Label emailLabel = new Label("Email:");
-        grid.add(emailLabel, 0, 1);
+        // Email label and field
+        JLabel emailLabel = new JLabel("Email:");
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        panel.add(emailLabel, constraints);
 
-        TextField emailTextField = new TextField();
-        grid.add(emailTextField, 1, 1);
+        JTextField emailTextField = new JTextField(15);
+        constraints.gridx = 1;
+        panel.add(emailTextField, constraints);
 
-        Label passwordLabel = new Label("Password:");
-        grid.add(passwordLabel, 0, 2);
+        // Password label and field
+        JLabel passwordLabel = new JLabel("Password:");
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        panel.add(passwordLabel, constraints);
 
-        PasswordField passwordField = new PasswordField();
-        grid.add(passwordField, 1, 2);
+        JPasswordField passwordField = new JPasswordField(15);
+        constraints.gridx = 1;
+        panel.add(passwordField, constraints);
 
-        
-        Button loginButton = new Button("Login");
-        grid.add(loginButton, 1, 3);
+        // Login button
+        JButton loginButton = new JButton("Login");
+        constraints.gridx = 1;
+        constraints.gridy = 2;
+        panel.add(loginButton, constraints);
 
-        
-        loginButton.setOnAction(e -> {
-            String email = emailTextField.getText();
-            String password = passwordField.getText();
-            handleLogin(email, password);
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String email = emailTextField.getText();
+                String password = new String(passwordField.getPassword());
+                handleLogin(email, password);
+            }
         });
 
-        
-        Scene scene = new Scene(grid, 300, 275);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        add(panel);
     }
 
     private void handleLogin(String email, String password) {
         String url = "http://localhost:8005/auth/login";
         LoginUserDto loginUser = new LoginUserDto(email, password);
-
+    
         try {
             LoginResponse response = restTemplate.postForObject(url, loginUser, LoginResponse.class);
             if (response != null) {
-                System.out.println("Login successful! Token: " + response.getToken());
-                
+                JOptionPane.showMessageDialog(this, "Login successful! Token: " + response.getToken());
+                this.dispose(); // Zamknij okno logowania
+                MainPanel mainPanel = new MainPanel(); // Otwórz panel główny
+                mainPanel.setVisible(true);
             }
         } catch (Exception ex) {
-            System.out.println("Login failed: " + ex.getMessage());
-            
+            JOptionPane.showMessageDialog(this, "Login failed: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
     public static void main(String[] args) {
-        launch(args);
+        SwingUtilities.invokeLater(() -> {
+            LoginApplication loginFrame = new LoginApplication();
+            loginFrame.setVisible(true);
+        });
     }
 }

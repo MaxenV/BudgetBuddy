@@ -39,6 +39,15 @@ public class JwtService {
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
+    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails, Long userId) {
+        extraClaims.put("userId", userId);
+        return buildToken(extraClaims, userDetails, jwtExpiration);
+    }
+
+    public Long extractUserIdFromToken(String token) {
+        return extractClaim(token, claims -> claims.get("userId", Long.class));
+    }
+
     public long getExpirationTime() {
         return jwtExpiration;
     }
