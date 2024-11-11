@@ -27,11 +27,12 @@ import androidx.compose.ui.unit.dp
 import com.example.budget_buddy_android.ui.theme.CustomColor
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 
 @Composable
 fun RegisterView() {
-
+    val viewModel: RegisterViewModel = viewModel()
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -46,12 +47,15 @@ fun RegisterView() {
                 Text("Registration", fontSize = 24.sp, color = Color.White)
                 Spacer(modifier = Modifier.height(10.dp))
 
-                RegisterRow("Full name", "", { })
-                RegisterRow("Email", "", { })
+                RegisterRow("Full name", viewModel.fullName.value, { viewModel.updateFullName(it) })
+                RegisterRow("Email", viewModel.email.value, { viewModel.updateEmail(it) })
                 Spacer(modifier = Modifier.height(10.dp))
 
-                RegisterRow("Password", "", { })
-                RegisterRow("Repeat password", "", { })
+                RegisterRow("Password", viewModel.password.value, { viewModel.updatePassword(it) })
+                RegisterRow("Repeat password",
+                    viewModel.rpassword.value,
+                    { viewModel.updateRPassword(it) }
+                )
 
                 Spacer(modifier = Modifier.height(30.dp))
                 Button(onClick = {}) {
