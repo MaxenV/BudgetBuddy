@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             Budget_buddy_androidTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Surface(modifier = Modifier.padding(innerPadding)) {
+                    Surface(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
                         Navigation()
                     }
                 }
