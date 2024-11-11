@@ -52,15 +52,21 @@ fun RegisterView() {
                 Spacer(modifier = Modifier.height(10.dp))
 
                 RegisterRow("Password", viewModel.password.value, { viewModel.updatePassword(it) })
-                RegisterRow("Repeat password",
-                    viewModel.rpassword.value,
-                    { viewModel.updateRPassword(it) }
-                )
+                RegisterRow(
+                    "Repeat password",
+                    viewModel.cpassword.value,
+                    { viewModel.updateRPassword(it) })
 
                 Spacer(modifier = Modifier.height(30.dp))
-                Button(onClick = {}) {
+                Button(onClick = { viewModel.registerUser() }) {
                     Text("Register me")
                 }
+                Spacer(modifier = Modifier.height(30.dp))
+                if(viewModel.errorMess.isNotEmpty())
+                {
+                    Text(viewModel.errorMess)
+                }
+
             }
         }
     }
@@ -88,9 +94,7 @@ fun RegisterRow(
 }
 
 
-@Preview(
-    showBackground = true, showSystemUi = true
-)
+@Preview
 @Composable
 fun RegisterViewPreview() {
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
