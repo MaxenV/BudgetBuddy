@@ -1,5 +1,7 @@
 package com.example.budget_buddy_android.api
 
+import com.example.budget_buddy_android.models.LoginRequest
+import com.example.budget_buddy_android.models.LoginResponse
 import com.example.budget_buddy_android.models.User
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -22,5 +24,8 @@ object ApiClient {
 interface ApiService {
     @POST("auth/signup")
     suspend fun register(@Body user: User): Response<User>
+
+    @POST("/auth/login")
+    suspend fun login(@Body login: LoginRequest ): Response<LoginResponse>
 }
 
