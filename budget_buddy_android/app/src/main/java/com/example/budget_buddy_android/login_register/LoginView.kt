@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.budget_buddy_android.ui.theme.CustomColor
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -38,6 +39,8 @@ fun LoginView(
     navController: NavController, userRepository: UserRepository
 ) {
     val viewModel: LoginViewModel = viewModel()
+    val context = LocalContext.current
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -58,7 +61,7 @@ fun LoginView(
                     Text(viewModel.errorMess)
                 }
                 Spacer(modifier = Modifier.height(15.dp))
-                Button(onClick = { viewModel.loginUser(userRepository) }) {
+                Button(onClick = { viewModel.loginUser(userRepository, context) }) {
                     Text("Login me")
                 }
                 Text(text = "Don't have an account? Register here",

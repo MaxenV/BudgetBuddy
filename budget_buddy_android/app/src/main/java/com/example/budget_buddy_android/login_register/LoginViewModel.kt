@@ -1,5 +1,7 @@
 package com.example.budget_buddy_android.login_register
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,8 +29,15 @@ class LoginViewModel : ViewModel() {
         _password.value = password
     }
 
-    fun loginUser(userRepository: UserRepository) {
-        val login = LoginRequest(_email.value, _password.value)
-        userRepository.loginUser(login, viewModelScope = viewModelScope)
+    fun loginUser(userRepository: UserRepository, context: Context) {
+        val loginRequest = LoginRequest(_email.value, _password.value)
+        userRepository.loginUser(loginRequest, viewModelScope) { result ->
+            result.onSuccess {
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            }.onFailure {
+                val mess = it.message ?: "Unknown error"
+                Toast.makeText(context, mess, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

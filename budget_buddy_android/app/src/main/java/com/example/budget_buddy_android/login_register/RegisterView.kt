@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.budget_buddy_android.ui.theme.CustomColor
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -38,6 +39,7 @@ fun RegisterView(
     navController: NavController, userRepository: UserRepository
 ) {
     val viewModel: RegisterViewModel = viewModel()
+    val context = LocalContext.current
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -67,7 +69,7 @@ fun RegisterView(
                 }
 
                 Spacer(modifier = Modifier.height(15.dp))
-                Button(onClick = { viewModel.registerUser(userRepository) }) {
+                Button(onClick = { viewModel.registerUser(userRepository,context) }) {
                     Text("Register me")
                 }
                 Text(text = "If you have account? Login here",

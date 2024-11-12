@@ -2,50 +2,75 @@ package com.example.budget_buddy_android.api
 
 import android.util.Log
 import com.example.budget_buddy_android.api.ApiClient.apiService
+import com.example.budget_buddy_android.exceptions.LoginException
+import com.example.budget_buddy_android.exceptions.RegistrationException
 import com.example.budget_buddy_android.models.LoginRequest
 import com.example.budget_buddy_android.models.RegisterRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import java.net.ConnectException
 
 class UserRepository {
-    fun registerUser(registerRequest: RegisterRequest, viewModelScope: CoroutineScope) {
+    fun registerUser(
+        registerRequest: RegisterRequest,
+        viewModelScope: CoroutineScope,
+        onResult: (Result<String>) -> Unit
+    ) {
         viewModelScope.launch {
             try {
                 val response = apiService.register(registerRequest)
                 if (response.isSuccessful) {
-                    val registeredUser = response.body()
-                    Log.d("API", "registerUser: Registration successful, user: $registeredUser")
+                    response.body()
+                    onResult(Result.success("Registration successful"))
                 } else {
                     val errorBody = response.errorBody()?.string()
                     if (errorBody != null && errorBody.contains("Duplicate entry")) {
-                        throw Exception("User already exists")
+                        onResult(Result.failure(RegistrationException("User already exists")))
                     } else {
-                        throw Exception("Registration failed with code ${response.code()}, error: $errorBody")
+                        onResult(Result.failure(RegistrationException("Registration failed with code ${response.code()}, error: $errorBody")))
                     }
                 }
             } catch (e: HttpException) {
-                throw Exception("HTTP error: ${e.message}")
+                onResult(Result.failure(RegistrationException("HTTP error: ${e.message}")))
+            } catch (e: ConnectException) {
+                onResult(Result.failure(LoginException("Cannot connect to server")))
             } catch (e: Exception) {
-                throw Exception("Error register request: $e")
+                onResult(Result.failure(RegistrationException("Error register request: $e")))
             }
         }
     }
 
-    fun loginUser(loginRequest: LoginRequest, viewModelScope: CoroutineScope){
+    fun loginUser(
+        loginRequest: LoginRequest,
+        viewModelScope: CoroutineScope,
+        onResult: (Result<String>) -> Unit
+    ) {
         viewModelScope.launch {
             try {
                 val response = apiService.login(loginRequest)
                 if (response.isSuccessful) {
-                    val loggedUser = response.body()
-                    Log.d("API", "loggedUser: Login successful, user: $loggedUser")
+                    response.body()
+                    onResult(Result.success("Login successful"))
                 } else {
-                    Log.d("API", "loggedUser: Login failed with code ${response.code()}, error: ${response.errorBody()?.string()}")
+                    if (response.code() == 401) {
+                        onResult(Result.failure(LoginException("Bad email or password")))
+                    } else {
+                        onResult(Result.failure(LoginException("Unknown error: ${response.code()}")))
+                        Log.d(
+                            "API", "loggedUser: Login failed with code ${response.code()}, error: ${
+                                response.errorBody()?.string()
+                            }"
+                        )
+                    }
                 }
             } catch (e: HttpException) {
-                Log.d("API", "loggedUser: HTTP error ${e.message}")
+                onResult(Result.failure(LoginException("HTTP error: ${e.message}")))
+            } catch (e: ConnectException) {
+                onResult(Result.failure(LoginException("Cannot connect to server")))
             } catch (e: Exception) {
-                Log.d("API", "loggedUser: Error login request $e")
+                Log.d("API ERR", "loginUser: $e")
+                onResult(Result.failure(LoginException("Error login request: $e")))
             }
         }
     }
