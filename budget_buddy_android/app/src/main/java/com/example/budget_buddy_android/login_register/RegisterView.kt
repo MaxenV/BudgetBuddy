@@ -1,8 +1,6 @@
 package com.example.budget_buddy_android.login_register
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
@@ -28,11 +25,13 @@ import com.example.budget_buddy_android.ui.theme.CustomColor
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.budget_buddy_android.api.UserRepository
 
 
 @Composable
-fun RegisterView() {
+fun RegisterView(userRepository: UserRepository) {
     val viewModel: RegisterViewModel = viewModel()
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -58,12 +57,11 @@ fun RegisterView() {
                     { viewModel.updateRPassword(it) })
 
                 Spacer(modifier = Modifier.height(30.dp))
-                Button(onClick = { viewModel.registerUser() }) {
+                Button(onClick = { viewModel.registerUser(userRepository) }) {
                     Text("Register me")
                 }
                 Spacer(modifier = Modifier.height(30.dp))
-                if(viewModel.errorMess.isNotEmpty())
-                {
+                if (viewModel.errorMess.isNotEmpty()) {
                     Text(viewModel.errorMess)
                 }
 
@@ -103,7 +101,7 @@ fun RegisterViewPreview() {
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            RegisterView()
+            RegisterView(UserRepository())
         }
     }
 }

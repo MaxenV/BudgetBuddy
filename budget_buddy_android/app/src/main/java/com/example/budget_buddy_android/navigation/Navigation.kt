@@ -5,13 +5,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.budget_buddy_android.api.UserRepository
 import com.example.budget_buddy_android.login_register.LoginView
 import com.example.budget_buddy_android.login_register.RegisterView
 import com.example.budget_buddy_android.user_dashboard.HomeDashboard
 
 @Composable
 fun Navigation(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    userRepository: UserRepository = UserRepository()
 ) {
 
     NavHost(
@@ -19,10 +21,10 @@ fun Navigation(
         startDestination = Screen.LoginScreen.route
     ){
         composable(Screen.RegisterScreen.route){
-            RegisterView()
+            RegisterView(userRepository)
         }
         composable(Screen.LoginScreen.route){
-            LoginView()
+            LoginView(userRepository)
         }
         composable(Screen.HomeDashboardScreen.route){
             HomeDashboard()

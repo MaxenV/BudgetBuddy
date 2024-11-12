@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.budget_buddy_android.api.UserRepository
 import com.example.budget_buddy_android.navigation.Navigation
 import com.example.budget_buddy_android.ui.theme.Budget_buddy_androidTheme
 
@@ -19,6 +20,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             Budget_buddy_androidTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
