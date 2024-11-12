@@ -1,6 +1,7 @@
 package com.example.budget_buddy_android.login_register
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,14 +24,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.budget_buddy_android.ui.theme.CustomColor
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.budget_buddy_android.api.UserRepository
+import com.example.budget_buddy_android.navigation.Screen
+import androidx.navigation.compose.rememberNavController
 
 
 @Composable
 fun LoginView(
-    userRepository: UserRepository
+    navController: NavController, userRepository: UserRepository
 ) {
     val viewModel: LoginViewModel = viewModel()
     Column(
@@ -49,16 +54,21 @@ fun LoginView(
 
                 LoginRow("Email", viewModel.email.value, { viewModel.updateEmail(it) })
                 LoginRow("Password", viewModel.password.value, { viewModel.updatePassword(it) })
-
-                Spacer(modifier = Modifier.height(30.dp))
+                if (viewModel.errorMess.isNotEmpty()) {
+                    Text(viewModel.errorMess)
+                }
+                Spacer(modifier = Modifier.height(15.dp))
                 Button(onClick = { viewModel.loginUser(userRepository) }) {
                     Text("Login me")
                 }
-                Spacer(modifier = Modifier.height(30.dp))
-                if(viewModel.errorMess.isNotEmpty())
-                {
-                    Text(viewModel.errorMess)
-                }
+                Text(text = "Don't have an account? Register here",
+                    color = Color.White,
+                    textDecoration = TextDecoration.Underline,
+                    modifier = Modifier
+                        .clickable {
+                            navController.navigate(Screen.RegisterScreen.route)
+                        }
+                        .padding(10.dp))
 
             }
         }
@@ -90,13 +100,14 @@ fun LoginRow(
 @Preview
 @Composable
 fun LoginViewPreview() {
+    val navController = rememberNavController()
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Surface(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            LoginView(UserRepository())
+            LoginView(navController, UserRepository())
         }
     }
 }

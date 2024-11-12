@@ -17,16 +17,15 @@ fun Navigation(
 ) {
 
     NavHost(
-        navController = navController,
-        startDestination = Screen.LoginScreen.route
-    ){
-        composable(Screen.RegisterScreen.route){
-            RegisterView(userRepository)
+        navController = navController, startDestination = Screen.LoginScreen.route
+    ) {
+        composable(Screen.RegisterScreen.route) {
+            RegisterView(navController = navController, userRepository = userRepository)
         }
-        composable(Screen.LoginScreen.route){
-            LoginView(userRepository)
+        composable(Screen.LoginScreen.route) {
+            LoginView(navController = navController, userRepository = userRepository)
         }
-        composable(Screen.HomeDashboardScreen.route){
+        composable(Screen.HomeDashboardScreen.route) {
             HomeDashboard()
         }
     }
