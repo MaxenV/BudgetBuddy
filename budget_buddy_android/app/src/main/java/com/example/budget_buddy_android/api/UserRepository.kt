@@ -3,16 +3,16 @@ package com.example.budget_buddy_android.api
 import android.util.Log
 import com.example.budget_buddy_android.api.ApiClient.apiService
 import com.example.budget_buddy_android.models.LoginRequest
-import com.example.budget_buddy_android.models.User
+import com.example.budget_buddy_android.models.RegisterRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
 class UserRepository {
-    fun registerUser(user: User, viewModelScope: CoroutineScope) {
+    fun registerUser(registerRequest: RegisterRequest, viewModelScope: CoroutineScope) {
         viewModelScope.launch {
             try {
-                val response = apiService.register(user)
+                val response = apiService.register(registerRequest)
                 if (response.isSuccessful) {
                     val registeredUser = response.body()
                     Log.d("API", "registerUser: Registration successful, user: $registeredUser")

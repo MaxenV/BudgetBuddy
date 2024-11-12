@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.budget_buddy_android.api.UserRepository
-import com.example.budget_buddy_android.models.User
+import com.example.budget_buddy_android.models.RegisterRequest
 
 class RegisterViewModel : ViewModel() {
     private var _fullName = mutableStateOf("")
@@ -42,8 +42,8 @@ class RegisterViewModel : ViewModel() {
 
     fun registerUser(userRepository: UserRepository) {
         if (_password.value == _cpassword.value) {
-            val user = User(_fullName.value, _email.value, _password.value)
-            userRepository.registerUser(user, viewModelScope = viewModelScope)
+            val registerRequest = RegisterRequest(_fullName.value, _email.value, _password.value)
+            userRepository.registerUser(registerRequest, viewModelScope = viewModelScope)
         } else {
             errorMess = "Passwords are not equals"
         }
