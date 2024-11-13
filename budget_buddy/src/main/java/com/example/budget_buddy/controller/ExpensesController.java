@@ -3,6 +3,7 @@ package com.example.budget_buddy.controller;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,17 +40,20 @@ public class ExpensesController {
         return expensesService.getExpenseById(id);
     }
 
-    @GetMapping("/by-date-range")
-    public List<ExpenseDto> getExpensesByDateRange(@RequestParam Date startDate, @RequestParam Date endDate) {
+    @GetMapping("/date-range")
+    public List<ExpenseDto> getExpensesByDateRange(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date endDate) {
         return expensesService.getExpensesByUserAndDateRange(startDate, endDate);
     }
 
-    @GetMapping("/by-date")
-    public List<ExpenseDto> getExpensesByDate(@RequestParam Date date) {
+    @GetMapping("/day")
+    public List<ExpenseDto> getExpensesByDate(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date) {
         return expensesService.getExpensesByUserAndDate(date);
     }
 
-    @GetMapping("/by-category")
+    @GetMapping("/category")
     public List<ExpenseDto> getExpensesByCategory(@RequestParam String category) {
         return expensesService.getExpensesByUserAndCategory(category);
     }

@@ -58,7 +58,7 @@ public class ExpensesService {
 
     public List<ExpenseDto> getExpensesByUserAndDate(Date date) {
         User user = getCurrentUser();
-        return expenseRepository.findByUserAndExpenseDateTime(user, date).stream()
+        return expenseRepository.findByUserAndExpenseDate(user, date).stream()
                 .map(expense -> new ExpenseDto(expense))
                 .collect(Collectors.toList());
     }
