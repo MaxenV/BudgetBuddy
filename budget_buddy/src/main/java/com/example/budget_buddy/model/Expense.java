@@ -1,5 +1,6 @@
 package com.example.budget_buddy.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -25,6 +26,15 @@ public class Expense {
 
     @Column(nullable = false)
     private String expenseName;
+
+    @Column(nullable = false)
+    private BigDecimal coast;
+
+    @Column(nullable = true)
+    private String category;
+
+    @Column(nullable = true)
+    private String description;
 
     @Column(nullable = true)
     private Date expenseDateTime;
@@ -87,5 +97,29 @@ public class Expense {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public BigDecimal getCoast() {
+        return coast;
+    }
+
+    public void setCoast(BigDecimal coast) {
+        this.coast = coast;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

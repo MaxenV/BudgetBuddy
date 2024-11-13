@@ -1,41 +1,31 @@
 package com.example.budget_buddy.dto;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.example.budget_buddy.model.Expense;
 
 public class ExpenseDto {
-    private Integer id;
     private String expenseName;
+    private BigDecimal coast;
+    private String category;
+    private String description;
     private Date expenseDateTime;
-    private Date createdAt;
-    private Date updatedAt;
 
     public ExpenseDto(Integer id, String expenseName, Date expenseDateTime, Date createdAt, Date updatedAt) {
-        this.id = id;
         this.expenseName = expenseName;
         this.expenseDateTime = expenseDateTime;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     public ExpenseDto() {
     }
 
     public ExpenseDto(Expense expense) {
-        this.id = expense.getId();
         this.expenseName = expense.getExpenseName();
+        this.coast = expense.getCoast();
+        this.category = expense.getCategory();
+        this.description = expense.getDescription();
         this.expenseDateTime = expense.getExpenseDateTime();
-        this.createdAt = expense.getCreatedAt();
-        this.updatedAt = expense.getUpdatedAt();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getExpenseName() {
@@ -54,19 +44,27 @@ public class ExpenseDto {
         this.expenseDateTime = expenseDateTime;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public BigDecimal getCoast() {
+        return coast;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setCoast(BigDecimal coast) {
+        this.coast = coast;
     }
 
-    public Date getUpdatedAt() {
-        return updatedAt;
+    public String getCategory() {
+        return category;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
