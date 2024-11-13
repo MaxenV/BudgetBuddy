@@ -6,26 +6,31 @@ import java.util.Date;
 import com.example.budget_buddy.model.Expense;
 
 public class ExpenseDto {
+    private Integer id;
     private String expenseName;
     private BigDecimal coast;
     private String category;
     private String description;
     private Date expenseDateTime;
 
-    public ExpenseDto(Integer id, String expenseName, Date expenseDateTime, Date createdAt, Date updatedAt) {
-        this.expenseName = expenseName;
-        this.expenseDateTime = expenseDateTime;
-    }
-
     public ExpenseDto() {
     }
 
     public ExpenseDto(Expense expense) {
+        this.id = expense.getId();
         this.expenseName = expense.getExpenseName();
         this.coast = expense.getCoast();
         this.category = expense.getCategory();
         this.description = expense.getDescription();
         this.expenseDateTime = expense.getExpenseDateTime();
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getExpenseName() {
