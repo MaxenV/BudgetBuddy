@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.budget_buddy.dto.ExpenseDto;
 import com.example.budget_buddy.model.Expense;
 import com.example.budget_buddy.model.User;
 import com.example.budget_buddy.service.ExpensesService;
@@ -31,7 +32,7 @@ public class ExpensesController {
     }
 
     @GetMapping("/")
-    public List<Expense> getExpenses() {
+    public List<ExpenseDto> getExpenses() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
         return expensesService.getExpensesByUser(currentUser);

@@ -1,9 +1,11 @@
 package com.example.budget_buddy.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.example.budget_buddy.dto.ExpenseDto;
 import com.example.budget_buddy.model.Expense;
 import com.example.budget_buddy.model.User;
 import com.example.budget_buddy.repository.ExpenseRepository;
@@ -21,7 +23,9 @@ public class ExpensesService {
         return expenseRepository.save(expense);
     }
 
-    public List<Expense> getExpensesByUser(User user) {
-        return expenseRepository.findByUser(user);
+    public List<ExpenseDto> getExpensesByUser(User user) {
+        return expenseRepository.findByUser(user).stream()
+                .map(expense -> new ExpenseDto(expense))
+                .collect(Collectors.toList());
     }
 }
