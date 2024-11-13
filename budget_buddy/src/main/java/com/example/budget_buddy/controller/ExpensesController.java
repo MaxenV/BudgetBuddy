@@ -16,7 +16,7 @@ import com.example.budget_buddy.model.Expense;
 import com.example.budget_buddy.service.ExpensesService;
 
 @RestController
-@RequestMapping("/expenses")
+@RequestMapping("/expense")
 public class ExpensesController {
     private final ExpensesService expensesService;
 
@@ -24,12 +24,12 @@ public class ExpensesController {
         this.expensesService = expensesService;
     }
 
-    @PostMapping("/")
+    @PostMapping("/add")
     public Expense addExpense(@RequestBody Expense expense) {
         return expensesService.addExpense(expense);
     }
 
-    @GetMapping("/")
+    @GetMapping("/all")
     public List<ExpenseDto> getExpenses() {
         return expensesService.getExpensesByUser();
     }
@@ -39,17 +39,17 @@ public class ExpensesController {
         return expensesService.getExpenseById(id);
     }
 
-    @GetMapping("/date-range")
+    @GetMapping("/by-date-range")
     public List<ExpenseDto> getExpensesByDateRange(@RequestParam Date startDate, @RequestParam Date endDate) {
         return expensesService.getExpensesByUserAndDateRange(startDate, endDate);
     }
 
-    @GetMapping("/date")
+    @GetMapping("/by-date")
     public List<ExpenseDto> getExpensesByDate(@RequestParam Date date) {
         return expensesService.getExpensesByUserAndDate(date);
     }
 
-    @GetMapping("/category")
+    @GetMapping("/by-category")
     public List<ExpenseDto> getExpensesByCategory(@RequestParam String category) {
         return expensesService.getExpensesByUserAndCategory(category);
     }
