@@ -11,6 +11,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 object ApiClient {
     private const val BASE_URL = "http://10.0.2.2:8005/"
@@ -42,5 +43,9 @@ interface ApiService {
 
     @GET("/expense/all")
     suspend fun allExpenses(@Header("Authorization") token: String): Response<List<Expense>>
+
+
+    @GET("/expense/{id}")
+    suspend fun singleExpense(@Header("Authorization") token: String, @Path("id") id: Int): Response<Expense>
 }
 
