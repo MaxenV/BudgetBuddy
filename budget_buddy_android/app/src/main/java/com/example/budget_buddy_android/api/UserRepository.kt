@@ -50,8 +50,13 @@ class UserRepository {
             try {
                 val response = apiService.login(loginRequest)
                 if (response.isSuccessful) {
-                    response.body()
-                    onResult(Result.success("Login successful"))
+                    val loginResponse = response.body()
+                    if (loginResponse != null) {
+                        ApiClient.setToken("Bearer ${loginResponse.token}")
+                        onResult(Result.success("Login successful"))
+                    } else {
+                        onResult(Result.failure(LoginException("Login response is null")))
+                    }
                 } else {
                     if (response.code() == 401) {
                         onResult(Result.failure(LoginException("Bad email or password")))

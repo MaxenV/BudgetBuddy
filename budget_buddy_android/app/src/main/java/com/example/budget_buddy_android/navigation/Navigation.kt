@@ -17,7 +17,7 @@ fun Navigation(
 ) {
 
     NavHost(
-        navController = navController, startDestination = Screen.DashboardScreen.route
+        navController = navController, startDestination = Screen.LoginScreen.route
     ) {
         composable(Screen.RegisterScreen.route) {
             RegisterView(navController = navController, userRepository = userRepository)

@@ -32,6 +32,7 @@ import androidx.navigation.NavController
 import com.example.budget_buddy_android.api.UserRepository
 import com.example.budget_buddy_android.navigation.Screen
 import androidx.navigation.compose.rememberNavController
+import com.example.budget_buddy_android.api.ApiClient
 
 
 @Composable
@@ -61,7 +62,7 @@ fun LoginView(
                     Text(viewModel.errorMess)
                 }
                 Spacer(modifier = Modifier.height(15.dp))
-                Button(onClick = { viewModel.loginUser(userRepository, context) }) {
+                Button(onClick = { viewModel.loginUser(userRepository, context, navController) }) {
                     Text("Login me")
                 }
                 Text(text = "Don't have an account? Register here",
