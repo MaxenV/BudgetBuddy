@@ -6,21 +6,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.budget_buddy.dto.LoginResponse;
 import com.example.budget_buddy.dto.LoginUserDto;
 import com.example.budget_buddy.dto.RegisterUserDto;
 import com.example.budget_buddy.model.User;
 import com.example.budget_buddy.service.AuthenticationService;
 import com.example.budget_buddy.service.JwtService;
-import com.example.budget_buddy.service.LoginResponse;
-
-
-
 
 @RequestMapping("/auth")
 @RestController
 public class AuthenticationController {
     private final JwtService jwtService;
-    
+
     private final AuthenticationService authenticationService;
 
     public AuthenticationController(JwtService jwtService, AuthenticationService authenticationService) {
@@ -41,7 +38,8 @@ public class AuthenticationController {
 
         String jwtToken = jwtService.generateToken(authenticatedUser);
 
-        LoginResponse loginResponse = new LoginResponse().setToken(jwtToken).setExpiresIn(jwtService.getExpirationTime());
+        LoginResponse loginResponse = new LoginResponse().setToken(jwtToken)
+                .setExpiresIn(jwtService.getExpirationTime());
 
         return ResponseEntity.ok(loginResponse);
     }
