@@ -8,7 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.budget_buddy_android.api.UserRepository
 import com.example.budget_buddy_android.login_register.LoginView
 import com.example.budget_buddy_android.login_register.RegisterView
-import com.example.budget_buddy_android.user_dashboard.HomeDashboard
+import com.example.budget_buddy_android.dashboard.DashboardView
 
 @Composable
 fun Navigation(
@@ -17,7 +17,7 @@ fun Navigation(
 ) {
 
     NavHost(
-        navController = navController, startDestination = Screen.LoginScreen.route
+        navController = navController, startDestination = Screen.DashboardScreen.route
     ) {
         composable(Screen.RegisterScreen.route) {
             RegisterView(navController = navController, userRepository = userRepository)
@@ -25,8 +25,8 @@ fun Navigation(
         composable(Screen.LoginScreen.route) {
             LoginView(navController = navController, userRepository = userRepository)
         }
-        composable(Screen.HomeDashboardScreen.route) {
-            HomeDashboard()
+        composable(Screen.DashboardScreen.route) {
+            DashboardView(navController = navController, userRepository = userRepository)
         }
     }
 }
