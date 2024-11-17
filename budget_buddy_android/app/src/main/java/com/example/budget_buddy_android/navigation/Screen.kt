@@ -6,5 +6,5 @@ sealed class Screen (
     object RegisterScreen : Screen("register_screen")
     object LoginScreen : Screen("login_screen")
     object DashboardScreen : Screen("home_dashboard_screen")
-
+    object DetailScreen : Screen("detail_screen")
 }

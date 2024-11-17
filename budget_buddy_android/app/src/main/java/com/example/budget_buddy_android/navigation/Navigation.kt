@@ -28,5 +28,7 @@ fun Navigation(
         composable(Screen.DashboardScreen.route) {
             DashboardView(navController = navController, userRepository = userRepository)
         }
+        composable(Screen.DetailScreen.route) {
+        }
     }
 }
