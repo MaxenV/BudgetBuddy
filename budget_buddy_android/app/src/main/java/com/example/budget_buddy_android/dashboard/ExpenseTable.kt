@@ -1,5 +1,6 @@
 package com.example.budget_buddy_android.dashboard
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,12 +19,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.budget_buddy_android.models.Expense
+import com.example.budget_buddy_android.navigation.Screen
 import java.math.BigDecimal
 import java.util.Date
 
 @Composable
-fun ExpenseTable(expenses: List<Expense>) {
+fun ExpenseTable(expenses: List<Expense>, navController:NavController) {
     Column {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -61,6 +65,9 @@ fun ExpenseTable(expenses: List<Expense>) {
                     modifier = Modifier
                         .padding(5.dp, 10.dp)
                         .fillMaxWidth()
+                        .clickable {
+                            navController.navigate(Screen.DetailScreen.createRoute(expense.id))
+                        }
                 ) {
                     Text(
                         expense.expenseName,
@@ -94,6 +101,7 @@ fun ExpenseTablePreview(){
         Expense(2, "Electricity Bill", BigDecimal("75.00"), "Utilities", "Monthly bill", Date()),
         Expense(2, "Electricity Bill", BigDecimal("75.00"), "Utilities", "Monthly bill", Date()),
     )
+    val navController: NavController = rememberNavController()
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Surface(
@@ -101,7 +109,7 @@ fun ExpenseTablePreview(){
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            ExpenseTable(expenseList)
+            ExpenseTable(expenseList,navController)
         }
     }
 }

@@ -31,8 +31,7 @@ fun DashboardView(
     }
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(top = 10.dp)
+        horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(top = 10.dp)
     ) {
         Row(
             modifier = Modifier.padding(10.dp)
@@ -42,7 +41,7 @@ fun DashboardView(
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
-            ExpenseTable(expenses = viewModel.expenses)
+            ExpenseTable(expenses = viewModel.expenses, navController = navController)
         }
     }
 }
