@@ -2,7 +2,9 @@ package com.example.budget_buddy_android.dashboard
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.budget_buddy_android.api.ExpensesRepository
@@ -12,6 +14,7 @@ import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.Calendar
 
 class DetailViewModel : ViewModel() {
 
@@ -22,15 +25,17 @@ class DetailViewModel : ViewModel() {
     val coast: State<String> = derivedStateOf { _currentExpense.value?.coast?.toString() ?: "" }
     val category: State<String> = derivedStateOf { _currentExpense.value?.category ?: "" }
     val description: State<String> = derivedStateOf { _currentExpense.value?.description ?: "" }
-    val expenseDateTime: State<String> =
-        derivedStateOf { formatExpenseDateTime(_currentExpense.value?.expenseDateTime) }
+    var expenseDateTime by mutableStateOf (
+        formatExpenseDateTime(_currentExpense.value?.expenseDateTime)
+    )
 
-    private fun formatExpenseDateTime(dateTime: Date?): String {
+    val calendar: Calendar = Calendar.getInstance().apply {
+        _currentExpense.value?.expenseDateTime?.let { time = it }
+    }
 
+    fun formatExpenseDateTime(dateTime: Date?): String {
         return dateTime?.let {
-            val myFormat = SimpleDateFormat(
-                "yyyy-MM-dd HH:mm:ss", Locale.getDefault()
-            )
+            val myFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
             myFormat.format(it)
         } ?: ""
     }
@@ -40,7 +45,7 @@ class DetailViewModel : ViewModel() {
             expensesRepository.fetchSingleExpense(viewModelScope, expenseId) { result ->
                 result.onSuccess { expense ->
                     _currentExpense.value = expense
-
+                    expenseDateTime = formatExpenseDateTime(_currentExpense.value?.expenseDateTime)
                 }.onFailure { exception ->
                     // Handle the error appropriately
                 }
@@ -48,24 +53,25 @@ class DetailViewModel : ViewModel() {
         }
     }
 
-    fun changeExpense(
+    fun updateExpense(
         name: String? = _currentExpense.value?.expenseName,
         coast: BigDecimal? = _currentExpense.value?.coast,
         category: String? = _currentExpense.value?.category,
         description: String? = _currentExpense.value?.description,
-        expenseDateTime: Date? = _currentExpense.value?.expenseDateTime,
+        dateTime: Date? = _currentExpense.value?.expenseDateTime,
     ) {
-        if (name != null && coast != null && category != null && description != null && expenseDateTime != null) {
+        if (name != null && coast != null && category != null && description != null && dateTime != null) {
             _currentExpense.value = _currentExpense.value?.copy(
                 expenseName = name,
                 coast = coast,
                 category = category,
                 description = description,
-                expenseDateTime = expenseDateTime
+                expenseDateTime = dateTime
             )
+            expenseDateTime = formatExpenseDateTime(_currentExpense.value?.expenseDateTime)
         }
-
     }
+
     fun toggleEditMode() {
         isEditMode.value = !isEditMode.value
     }

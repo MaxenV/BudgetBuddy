@@ -20,9 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.budget_buddy_android.api.ExpensesRepository
 import com.example.budget_buddy_android.models.Expense
 import java.math.BigDecimal
-import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
 
 @Composable
 fun DetailView(
@@ -39,7 +37,7 @@ fun DetailView(
             Text("Expense Name: ")
             if (viewModel.isEditMode.value) {
                 TextField(value = viewModel.expenseName.value,
-                    onValueChange = { name: String -> viewModel.changeExpense(name = name) })
+                    onValueChange = { name: String -> viewModel.updateExpense(name = name) })
             } else {
                 Text(viewModel.expenseName.value)
             }
@@ -49,7 +47,7 @@ fun DetailView(
             if (viewModel.isEditMode.value) {
                 TextField(value = viewModel.coast.value, onValueChange = { coast: String ->
                     val toBDecimal = BigDecimal(coast) ?: null
-                    viewModel.changeExpense(coast = toBDecimal)
+                    viewModel.updateExpense(coast = toBDecimal)
                 })
             } else {
                 Text(viewModel.coast.value)
@@ -59,7 +57,7 @@ fun DetailView(
             Text("Category: ")
             if (viewModel.isEditMode.value) {
                 TextField(value = viewModel.category.value,
-                    onValueChange = { category: String -> viewModel.changeExpense(category = category) })
+                    onValueChange = { category: String -> viewModel.updateExpense(category = category) })
             } else {
                 Text(viewModel.category.value)
             }
@@ -68,7 +66,7 @@ fun DetailView(
             Text("Description: ")
             if (viewModel.isEditMode.value) {
                 TextField(value = viewModel.description.value,
-                    onValueChange = { description: String -> viewModel.changeExpense(description = description) })
+                    onValueChange = { description: String -> viewModel.updateExpense(description = description) })
             } else {
                 Text(viewModel.description.value)
             }
@@ -76,21 +74,9 @@ fun DetailView(
         Row(modifier = Modifier.padding(8.dp)) {
             Text("Expense Date: ")
             if (viewModel.isEditMode.value) {
-                TextField(value = viewModel.expenseDateTime.value,
-                    onValueChange = { expenseDateTime: String ->
-                        val dateFormat =
-                            SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-                        try {
-                            val date = dateFormat.parse(expenseDateTime)
-                            if (date != null) {
-                                viewModel.changeExpense(expenseDateTime = date)
-                            }
-                        } catch (e: Exception) {
-                            // Handle the error appropriately, e.g., show a message to the user
-                        }
-                    })
+                DateTimePicker(viewModel = viewModel)
             } else {
-                Text(viewModel.expenseDateTime.value)
+                Text(viewModel.expenseDateTime)
             }
         }
         Row(modifier = Modifier.padding(8.dp)) {
