@@ -69,4 +69,35 @@ public class ExpensesService {
                 .map(expense -> new ExpenseDto(expense))
                 .collect(Collectors.toList());
     }
+
+    public Expense updateExpense(Integer expenseId, Expense updatedExpense) {
+        User user = getCurrentUser();
+        Expense existingExpense = expenseRepository.findById(expenseId)
+                .orElseThrow(() -> new RuntimeException("Expense not found"));
+
+        if (!existingExpense.getUser().equals(user)) {
+            throw new RuntimeException("Access denied");
+        }
+
+        existingExpense.setExpenseName(updatedExpense.getExpenseName());
+        existingExpense.setCost(updatedExpense.getCost());
+        existingExpense.setCategory(updatedExpense.getCategory());
+        existingExpense.setDescription(updatedExpense.getDescription());
+        existingExpense.setExpenseDateTime(updatedExpense.getExpenseDateTime());
+
+        return expenseRepository.save(existingExpense);
+    }
+
+    public void deleteExpense(Integer expenseId) {
+        User user = getCurrentUser();
+        Expense existingExpense = expenseRepository.findById(expenseId)
+                .orElseThrow(() -> new RuntimeException("Expense not found"));
+
+        if (!existingExpense.getUser().equals(user)) {
+            throw new RuntimeException("Access denied");
+        }
+
+        expenseRepository.delete(existingExpense);
+    }
+
 }

@@ -28,7 +28,7 @@ public class Expense {
     private String expenseName;
 
     @Column(nullable = false)
-    private BigDecimal coast;
+    private BigDecimal cost;
 
     @Column(nullable = true)
     private String category;
@@ -99,12 +99,12 @@ public class Expense {
         this.user = user;
     }
 
-    public BigDecimal getCoast() {
-        return coast;
+    public BigDecimal getCost() {
+        return cost;
     }
 
-    public void setCoast(BigDecimal coast) {
-        this.coast = coast;
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
     }
 
     public String getCategory() {
