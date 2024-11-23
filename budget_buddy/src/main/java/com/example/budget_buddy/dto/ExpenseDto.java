@@ -8,7 +8,7 @@ import com.example.budget_buddy.model.Expense;
 public class ExpenseDto {
     private Integer id;
     private String expenseName;
-    private BigDecimal coast;
+    private BigDecimal cost;
     private String category;
     private String description;
     private Date expenseDateTime;
@@ -19,7 +19,7 @@ public class ExpenseDto {
     public ExpenseDto(Expense expense) {
         this.id = expense.getId();
         this.expenseName = expense.getExpenseName();
-        this.coast = expense.getCoast();
+        this.cost = expense.getCost();
         this.category = expense.getCategory();
         this.description = expense.getDescription();
         this.expenseDateTime = expense.getExpenseDateTime();
@@ -49,12 +49,12 @@ public class ExpenseDto {
         this.expenseDateTime = expenseDateTime;
     }
 
-    public BigDecimal getCoast() {
-        return coast;
+    public BigDecimal getcost() {
+        return cost;
     }
 
-    public void setCoast(BigDecimal coast) {
-        this.coast = coast;
+    public void setcost(BigDecimal cost) {
+        this.cost = cost;
     }
 
     public String getCategory() {
