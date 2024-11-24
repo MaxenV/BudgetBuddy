@@ -22,7 +22,7 @@ class DetailViewModel : ViewModel() {
     private var _currentExpense = mutableStateOf<Expense?>(null)
 
     val expenseName: State<String> = derivedStateOf { _currentExpense.value?.expenseName ?: "" }
-    val coast: State<String> = derivedStateOf { _currentExpense.value?.coast?.toString() ?: "" }
+    val cost: State<String> = derivedStateOf { _currentExpense.value?.cost?.toString() ?: "" }
     val category: State<String> = derivedStateOf { _currentExpense.value?.category ?: "" }
     val description: State<String> = derivedStateOf { _currentExpense.value?.description ?: "" }
     var expenseDateTime by mutableStateOf (
@@ -55,15 +55,15 @@ class DetailViewModel : ViewModel() {
 
     fun updateExpense(
         name: String? = _currentExpense.value?.expenseName,
-        coast: BigDecimal? = _currentExpense.value?.coast,
+        cost: BigDecimal? = _currentExpense.value?.cost,
         category: String? = _currentExpense.value?.category,
         description: String? = _currentExpense.value?.description,
         dateTime: Date? = _currentExpense.value?.expenseDateTime,
     ) {
-        if (name != null && coast != null && category != null && description != null && dateTime != null) {
+        if (name != null && cost != null && category != null && description != null && dateTime != null) {
             _currentExpense.value = _currentExpense.value?.copy(
                 expenseName = name,
-                coast = coast,
+                cost = cost,
                 category = category,
                 description = description,
                 expenseDateTime = dateTime

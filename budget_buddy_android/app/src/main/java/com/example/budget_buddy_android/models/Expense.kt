@@ -6,7 +6,7 @@ import java.util.Date
 data class Expense (
     val id: Int,
     val expenseName: String,
-    val coast: BigDecimal,
+    val cost: BigDecimal,
     val category: String,
     val description: String,
     val expenseDateTime: Date

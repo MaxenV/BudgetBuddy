@@ -43,7 +43,7 @@ fun ExpenseTable(expenses: List<Expense>, navController:NavController) {
                     .padding(start = 5.dp)
             )
             Text(
-                "Coast",
+                "Cost",
                 modifier = Modifier
                     .width(100.dp)
                     .wrapContentWidth(Alignment.CenterHorizontally)
@@ -76,7 +76,7 @@ fun ExpenseTable(expenses: List<Expense>, navController:NavController) {
                             .wrapContentWidth(Alignment.Start)
                     )
                     Text(
-                        expense.coast.toString(),
+                        expense.cost.toString(),
                         modifier = Modifier
                             .width(100.dp)
                             .wrapContentWidth(Alignment.CenterHorizontally)

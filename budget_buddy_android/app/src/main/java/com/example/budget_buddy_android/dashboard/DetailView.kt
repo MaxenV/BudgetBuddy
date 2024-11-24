@@ -43,14 +43,14 @@ fun DetailView(
             }
         }
         Row(modifier = Modifier.padding(8.dp)) {
-            Text("Coast: ")
+            Text("Cost: ")
             if (viewModel.isEditMode.value) {
-                TextField(value = viewModel.coast.value, onValueChange = { coast: String ->
-                    val toBDecimal = BigDecimal(coast) ?: null
-                    viewModel.updateExpense(coast = toBDecimal)
+                TextField(value = viewModel.cost.value, onValueChange = { cost: String ->
+                    val toBDecimal = BigDecimal(cost) ?: null
+                    viewModel.updateExpense(cost = toBDecimal)
                 })
             } else {
-                Text(viewModel.coast.value)
+                Text(viewModel.cost.value)
             }
         }
         Row(modifier = Modifier.padding(8.dp)) {
