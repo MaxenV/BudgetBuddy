@@ -1,6 +1,9 @@
 package com.example.budget_buddy_android.navigation
 
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -11,6 +14,7 @@ import com.example.budget_buddy_android.login_register.LoginView
 import com.example.budget_buddy_android.login_register.RegisterView
 import com.example.budget_buddy_android.dashboard.DashboardView
 import com.example.budget_buddy_android.dashboard.DetailView
+import com.example.budget_buddy_android.ui.components.TopBar
 
 @Composable
 fun Navigation(
