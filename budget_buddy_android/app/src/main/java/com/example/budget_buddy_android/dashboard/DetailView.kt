@@ -19,6 +19,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.budget_buddy_android.api.ExpensesRepository
 import com.example.budget_buddy_android.models.Expense
+import com.example.budget_buddy_android.ui.components.TopBar
 import java.math.BigDecimal
 import java.util.Date
 
@@ -31,8 +32,10 @@ fun DetailView(
     LaunchedEffect(expenseId) {
         viewModel.fetchExpense(expenseId, expenseRepository)
     }
-
-    Column(modifier = Modifier.padding(16.dp)) {
+Scaffold (
+    topBar = { TopBar(navController,"Details", { }, {  }) }
+){ innerPadding->
+    Column(modifier = Modifier.padding(innerPadding)) {
         Row(modifier = Modifier.padding(8.dp)) {
             Text("Expense Name: ")
             if (viewModel.isEditMode.value) {
@@ -88,6 +91,8 @@ fun DetailView(
             }
         }
     }
+}
+
 }
 
 @Preview
