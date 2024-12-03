@@ -14,6 +14,7 @@ import com.example.budget_buddy_android.login_register.LoginView
 import com.example.budget_buddy_android.login_register.RegisterView
 import com.example.budget_buddy_android.dashboard.DashboardView
 import com.example.budget_buddy_android.dashboard.DetailView
+import com.example.budget_buddy_android.dashboard.NewExpenseView
 import com.example.budget_buddy_android.ui.components.TopBar
 
 @Composable
@@ -42,6 +43,9 @@ fun Navigation(
                 navController = navController,
                 expenseRepository = expenseRepository
             )
+        }
+        composable(Screen.AddExpenseScreen.route) {
+            NewExpenseView(navController = navController, expenseRepository = expenseRepository)
         }
     }
 }

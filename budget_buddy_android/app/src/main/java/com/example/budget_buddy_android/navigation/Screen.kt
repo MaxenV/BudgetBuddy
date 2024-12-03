@@ -9,4 +9,5 @@ sealed class Screen (
     object DetailScreen : Screen("detail_screen/{expenseId}") {
         fun createRoute(expenseId: Int) = "detail_screen/$expenseId"
     }
+    object AddExpenseScreen: Screen("add_expense")
 }
