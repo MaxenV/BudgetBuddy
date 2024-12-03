@@ -119,4 +119,31 @@ class ExpensesRepository {
             }
         }
     }
+
+    fun deleteExpense(
+        viewModelScope: CoroutineScope, expenseId: Int, onResult: (Result<Unit>) -> Unit
+    ) {
+        viewModelScope.launch {
+            try {
+                val token = ApiClient.getToken()
+                if (token != null) {
+                    val response = apiService.deleteExpense(token, expenseId)
+                    if (response.isSuccessful) {
+                        onResult(Result.success(Unit))
+                    } else {
+                        val errorBody = response.errorBody()?.string()
+                        onResult(Result.failure(Exception("Failed with code ${response.code()}, error: $errorBody")))
+                    }
+                } else {
+                    onResult(Result.failure(Exception("Token is null")))
+                }
+            } catch (e: HttpException) {
+                onResult(Result.failure(Exception("HTTP error: ${e.message}")))
+            } catch (e: ConnectException) {
+                onResult(Result.failure(Exception("Cannot connect to server")))
+            } catch (e: Exception) {
+                onResult(Result.failure(Exception("Error deleting expense: $e")))
+            }
+        }
+    }
 }

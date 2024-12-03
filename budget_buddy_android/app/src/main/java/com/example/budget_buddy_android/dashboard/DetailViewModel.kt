@@ -27,7 +27,7 @@ class DetailViewModel : ViewModel() {
     val cost: State<String> = derivedStateOf { _currentExpense.value?.cost?.toString() ?: "" }
     val category: State<String> = derivedStateOf { _currentExpense.value?.category ?: "" }
     val description: State<String> = derivedStateOf { _currentExpense.value?.description ?: "" }
-    var expenseDateTime by mutableStateOf (
+    var expenseDateTime by mutableStateOf(
         formatExpenseDateTime(_currentExpense.value?.expenseDateTime)
     )
 
@@ -74,18 +74,34 @@ class DetailViewModel : ViewModel() {
         }
     }
 
-    fun saveExpense(expensesRepository: ExpensesRepository){
+    fun saveExpense(expensesRepository: ExpensesRepository) {
         if (_currentExpense.value != null) {
             _currentExpense.value?.let { expense ->
                 val expenseDto = ExpenseDto(expense)
                 viewModelScope.launch {
                     Log.d("EXPENSE", "saveExpense: ${expense}")
-                    expensesRepository.updateExpense(viewModelScope, expense.id, expenseDto) { result ->
+                    expensesRepository.updateExpense(
+                        viewModelScope,
+                        expense.id,
+                        expenseDto
+                    ) { result ->
                         result.onSuccess { updatedExpense ->
                         }.onFailure { exception ->
                             // Handle the error appropriately
                         }
                     }
+                }
+            }
+        }
+    }
+
+    fun deleteExpense(expenseId: Int, expensesRepository: ExpensesRepository, onResult: (Result<Unit>) -> Unit) {
+        viewModelScope.launch {
+            expensesRepository.deleteExpense(viewModelScope, expenseId) { result ->
+                result.onSuccess {
+                    onResult(Result.success(Unit))
+                }.onFailure { exception ->
+                    onResult(Result.failure(exception))
                 }
             }
         }

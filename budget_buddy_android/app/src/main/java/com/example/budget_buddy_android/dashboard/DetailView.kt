@@ -20,6 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.budget_buddy_android.api.ExpensesRepository
 import com.example.budget_buddy_android.models.Expense
 import com.example.budget_buddy_android.ui.components.TopBar
+import com.example.budget_buddy_android.navigation.Screen
 import java.math.BigDecimal
 import java.util.Date
 
@@ -91,7 +92,15 @@ Scaffold (
             }) {
                 Text(if (viewModel.isEditMode.value) "Save" else "Edit")
             }
-            Button(onClick = { /* Add delete functionality here */ }) {
+            Button(onClick =  {
+                viewModel.deleteExpense(expenseId, expenseRepository) { result ->
+                    result.onSuccess {
+                        navController.navigate(Screen.DashboardScreen.route)
+                    }.onFailure { exception ->
+                        // Handle Exception
+                    }
+                }
+            }) {
                 Text("Delete")
             }
         }
