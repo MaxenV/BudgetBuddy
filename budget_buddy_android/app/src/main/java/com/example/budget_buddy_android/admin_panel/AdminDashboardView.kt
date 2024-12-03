@@ -1,4 +1,4 @@
-package com.example.budget_buddy_android.dashboard
+package com.example.budget_buddy_android.admin_panel
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -15,12 +16,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.budget_buddy_android.api.UserRepository
-import androidx.compose.material3.Surface
-import com.example.budget_buddy_android.navigation.Screen
+import com.example.budget_buddy_android.dashboard.DashboardViewModel
+import com.example.budget_buddy_android.dashboard.ExpenseTable
+import com.example.budget_buddy_android.dashboard.UsersTable
 import com.example.budget_buddy_android.ui.components.TopBar
 
 @Composable
-fun DashboardView(
+fun AdminDashboardView(
     navController: NavController, userRepository: UserRepository
 ) {
     val viewModel: DashboardViewModel = viewModel()
@@ -38,7 +40,7 @@ fun DashboardView(
             Row(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                ExpenseTable(expenses = viewModel.expenses, navController = navController)
+                UsersTable(users = viewModel.expenses, navController = navController)
             }
         }
     }
@@ -55,7 +57,7 @@ fun DashboardViewPreview() {
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            DashboardView(navController, UserRepository())
+            AdminDashboardView(navController, UserRepository())
         }
     }
 }
