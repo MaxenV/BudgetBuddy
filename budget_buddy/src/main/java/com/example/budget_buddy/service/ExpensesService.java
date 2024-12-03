@@ -12,13 +12,16 @@ import com.example.budget_buddy.dto.ExpenseDto;
 import com.example.budget_buddy.model.Expense;
 import com.example.budget_buddy.model.User;
 import com.example.budget_buddy.repository.ExpenseRepository;
+import com.example.budget_buddy.repository.UserRepository;
 
 @Service
 public class ExpensesService {
     private ExpenseRepository expenseRepository;
+    private UserRepository userRepository;
 
-    public ExpensesService(ExpenseRepository expenseRepository) {
+    public ExpensesService(ExpenseRepository expenseRepository, UserRepository userRepository) {
         this.expenseRepository = expenseRepository;
+        this.userRepository = userRepository;
     }
 
     private User getCurrentUser() {
@@ -39,8 +42,42 @@ public class ExpensesService {
                 .collect(Collectors.toList());
     }
 
+    public List<ExpenseDto> getExpensesByUser(Integer userId) {
+        User currentUser = getCurrentUser();
+
+        if (!currentUser.getIsAdmin()) {
+            throw new RuntimeException("Access denied");
+        }
+        System.out.println("userID: " + userId);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return expenseRepository.findByUser(user).stream()
+                .map(expense -> new ExpenseDto(expense))
+                .collect(Collectors.toList());
+    }
+
     public ExpenseDto getExpenseById(Integer id) {
         User user = getCurrentUser();
+        Expense expense = expenseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Expense not found"));
+        if (!expense.getUser().equals(user)) {
+            throw new RuntimeException("Access denied");
+        }
+        return new ExpenseDto(expense);
+    }
+
+    public ExpenseDto getExpenseById(Integer userId, Integer id) {
+        User currentUser = getCurrentUser();
+
+        if (!currentUser.getIsAdmin()) {
+            throw new RuntimeException("Access denied");
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         Expense expense = expenseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Expense not found"));
         if (!expense.getUser().equals(user)) {

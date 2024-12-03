@@ -55,9 +55,21 @@ public class ExpensesController {
         return expensesService.getExpensesByUser();
     }
 
+    @GetMapping("/user/all")
+    public List<ExpenseDto> getExpensesByUser(
+            @RequestParam Integer userId) {
+        return expensesService.getExpensesByUser(userId);
+    }
+
     @GetMapping("/{id}")
     public ExpenseDto getExpenseById(@PathVariable Integer id) {
         return expensesService.getExpenseById(id);
+    }
+
+    @GetMapping("/user/expense")
+    public ExpenseDto getExpensesByUser(
+            @RequestParam Integer userId, @RequestParam Integer expenseId) {
+        return expensesService.getExpenseById(userId, expenseId);
     }
 
     @GetMapping("/date-range")
