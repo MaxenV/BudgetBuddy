@@ -41,6 +41,7 @@ public class AuthenticationController {
         LoginResponse loginResponse = new LoginResponse().setToken(jwtToken)
                 .setExpiresIn(jwtService.getExpirationTime());
 
+        loginResponse.setIsAdmin(authenticatedUser.getIsAdmin());
         return ResponseEntity.ok(loginResponse);
     }
 }
