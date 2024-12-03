@@ -1,4 +1,5 @@
 package com.example.budget_buddy.controller;
+
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -10,8 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.budget_buddy.model.User;
 import com.example.budget_buddy.service.UserService;
-
-
 
 @RequestMapping("/users")
 @RestController
@@ -33,8 +32,9 @@ public class UserController {
 
     @GetMapping("/")
     public ResponseEntity<List<User>> allUsers() {
-        List <User> users = userService.allUsers();
+        List<User> users = userService.allUsers();
 
         return ResponseEntity.ok(users);
     }
+
 }
