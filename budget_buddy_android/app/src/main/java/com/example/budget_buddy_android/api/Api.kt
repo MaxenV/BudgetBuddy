@@ -1,5 +1,6 @@
 package com.example.budget_buddy_android.api
 
+import com.example.budget_buddy_android.dto.ExpenseDto
 import com.example.budget_buddy_android.models.Expense
 import com.example.budget_buddy_android.models.LoginRequest
 import com.example.budget_buddy_android.models.LoginResponse
@@ -11,6 +12,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 object ApiClient {
@@ -44,8 +46,14 @@ interface ApiService {
     @GET("/expense/all")
     suspend fun allExpenses(@Header("Authorization") token: String): Response<List<Expense>>
 
-
     @GET("/expense/{id}")
     suspend fun singleExpense(@Header("Authorization") token: String, @Path("id") id: Int): Response<Expense>
+
+    @PUT("/expense/{id}")
+    suspend fun updateExpense(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int,
+        @Body expense: ExpenseDto
+    ): Response<ExpenseDto>
 }
 

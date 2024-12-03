@@ -83,7 +83,12 @@ Scaffold (
             }
         }
         Row(modifier = Modifier.padding(8.dp)) {
-            Button(onClick = { viewModel.toggleEditMode() }) {
+            Button(onClick = {
+                if(viewModel.isEditMode.value){
+                    viewModel.saveExpense(expenseRepository)
+                }
+                viewModel.toggleEditMode()
+            }) {
                 Text(if (viewModel.isEditMode.value) "Save" else "Edit")
             }
             Button(onClick = { /* Add delete functionality here */ }) {

@@ -1,5 +1,6 @@
 package com.example.budget_buddy_android.dashboard
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -8,6 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.budget_buddy_android.api.ExpensesRepository
+import com.example.budget_buddy_android.dto.ExpenseDto
 import com.example.budget_buddy_android.models.Expense
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -69,6 +71,23 @@ class DetailViewModel : ViewModel() {
                 expenseDateTime = dateTime
             )
             expenseDateTime = formatExpenseDateTime(_currentExpense.value?.expenseDateTime)
+        }
+    }
+
+    fun saveExpense(expensesRepository: ExpensesRepository){
+        if (_currentExpense.value != null) {
+            _currentExpense.value?.let { expense ->
+                val expenseDto = ExpenseDto(expense)
+                viewModelScope.launch {
+                    Log.d("EXPENSE", "saveExpense: ${expense}")
+                    expensesRepository.updateExpense(viewModelScope, expense.id, expenseDto) { result ->
+                        result.onSuccess { updatedExpense ->
+                        }.onFailure { exception ->
+                            // Handle the error appropriately
+                        }
+                    }
+                }
+            }
         }
     }
 
