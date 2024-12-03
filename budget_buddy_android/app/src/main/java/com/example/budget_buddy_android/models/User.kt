@@ -12,7 +12,14 @@ data class LoginRequest(
 )
 
 data class LoginResponse(
-    val token:String,
-    val expiresIn: Int
+    val token: String,
+    val expiresIn: Int,
 )
 
+data class User(
+    val id: Int,
+    val fullName: String,
+    val email: String,
+    val isAdmin: Boolean,
+    val username: String
+)
