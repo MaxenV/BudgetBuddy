@@ -32,8 +32,14 @@ public class UserController {
 
     @GetMapping("/")
     public ResponseEntity<List<User>> allUsers() {
-        List<User> users = userService.allUsers();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) authentication.getPrincipal();
 
+        if (!currentUser.getIsAdmin()) {
+            return ResponseEntity.status(403).build();
+        }
+
+        List<User> users = userService.allUsers();
         return ResponseEntity.ok(users);
     }
 
