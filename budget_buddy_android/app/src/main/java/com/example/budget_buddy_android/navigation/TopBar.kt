@@ -10,10 +10,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavController
 import com.example.budget_buddy_android.R
+import com.example.budget_buddy_android.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(navController: NavController, title:String, onLogout: () -> Unit, onAddExpense: () -> Unit) {
+fun TopBar(navController: NavController, title:String) {
     TopAppBar(
         title = { Text(title) },
         navigationIcon = {
@@ -22,10 +23,12 @@ fun TopBar(navController: NavController, title:String, onLogout: () -> Unit, onA
             }
         },
         actions = {
-            IconButton(onClick = onAddExpense) {
+            IconButton(onClick = {
+                navController.navigate(Screen.AddExpenseScreen.route)
+            }) {
                 Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_add_foreground), contentDescription = "Add Expense")
             }
-            IconButton(onClick = onLogout) {
+            IconButton(onClick = {  }) {
                 Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_logout_foreground), contentDescription = "Logout")
             }
         }
