@@ -3,6 +3,7 @@ package com.example.budget_buddy.dto;
 public class LoginResponse {
     private String token;
     private long expiresIn;
+    private Boolean isAdmin;
 
     public String getToken() {
         return token;
@@ -20,5 +21,13 @@ public class LoginResponse {
     public LoginResponse setExpiresIn(long expiresIn) {
         this.expiresIn = expiresIn;
         return this;
+    }
+
+    public Boolean getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(Boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 }
