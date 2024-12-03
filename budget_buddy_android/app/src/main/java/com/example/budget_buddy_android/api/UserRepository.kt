@@ -4,8 +4,10 @@ import android.util.Log
 import com.example.budget_buddy_android.api.ApiClient.apiService
 import com.example.budget_buddy_android.exceptions.LoginException
 import com.example.budget_buddy_android.exceptions.RegistrationException
+import com.example.budget_buddy_android.models.Expense
 import com.example.budget_buddy_android.models.LoginRequest
 import com.example.budget_buddy_android.models.RegisterRequest
+import com.example.budget_buddy_android.models.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -79,4 +81,30 @@ class UserRepository {
             }
         }
     }
+
+    fun fetchAllUsers( viewModelScope: CoroutineScope, onResult: (Result<List<User>>) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val token = ApiClient.getToken()
+                if (token != null) {
+                    val response = apiService.allUsers(token)
+                    if (response.isSuccessful) {
+                        onResult(Result.success(response.body() ?: emptyList()))
+                    } else {
+                        val errorBody = response.errorBody()?.string()
+                        onResult(Result.failure(Exception("Failed with code ${response.code()}, error: $errorBody")))
+                    }
+                } else {
+                    onResult(Result.failure(Exception("Token is null")))
+                }
+            } catch (e: HttpException) {
+                onResult(Result.failure(Exception("HTTP error: ${e.message}")))
+            } catch (e: ConnectException) {
+                onResult(Result.failure(Exception("Cannot connect to server")))
+            } catch (e: Exception) {
+                onResult(Result.failure(Exception("Error fetching users: $e")))
+            }
+        }
+    }
+
 }

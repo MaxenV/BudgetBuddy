@@ -5,6 +5,7 @@ import com.example.budget_buddy_android.models.Expense
 import com.example.budget_buddy_android.models.LoginRequest
 import com.example.budget_buddy_android.models.LoginResponse
 import com.example.budget_buddy_android.models.RegisterRequest
+import com.example.budget_buddy_android.models.User
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -43,6 +44,9 @@ interface ApiService {
 
     @POST("/auth/login")
     suspend fun login(@Body login: LoginRequest): Response<LoginResponse>
+
+    @GET("/users")
+    suspend fun allUsers(@Header("Authorization") token: String):Response<List<User>>
 
     @GET("/expense/all")
     suspend fun allExpenses(@Header("Authorization") token: String): Response<List<Expense>>
