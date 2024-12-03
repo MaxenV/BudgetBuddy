@@ -33,7 +33,7 @@ fun DetailView(
         viewModel.fetchExpense(expenseId, expenseRepository)
     }
 Scaffold (
-    topBar = { TopBar(navController,"Details", { }, {  }) }
+    topBar = { TopBar(navController,"Details") }
 ){ innerPadding->
     Column(modifier = Modifier.padding(innerPadding)) {
         Row(modifier = Modifier.padding(8.dp)) {

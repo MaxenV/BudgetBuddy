@@ -35,7 +35,7 @@ fun DashboardView(
         viewModel.fetchExpenses()
     }
     Scaffold(
-        topBar = { TopBar(navController,"My dashboard", { onLogout() }, { onAddExpense() }) }
+        topBar = { TopBar(navController,"My dashboard") }
     ) { innerPadding ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
