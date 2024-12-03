@@ -65,8 +65,11 @@ class ExpensesRepository {
     }
 
     fun updateExpense(
-        viewModelScope: CoroutineScope, expenseId: Int, expenseDto: ExpenseDto, onResult: (Result<ExpenseDto>) -> Unit
-    ){
+        viewModelScope: CoroutineScope,
+        expenseId: Int,
+        expenseDto: ExpenseDto,
+        onResult: (Result<ExpenseDto>) -> Unit
+    ) {
         viewModelScope.launch {
             try {
                 val token = ApiClient.getToken()
@@ -87,6 +90,32 @@ class ExpensesRepository {
                 onResult(Result.failure(Exception("Cannot connect to server")))
             } catch (e: Exception) {
                 onResult(Result.failure(Exception("Error fetching expense: $e")))
+            }
+        }
+    }
+
+    fun addExpense(
+        viewModelScope: CoroutineScope,expenseDto: ExpenseDto, onResult: (Result<ExpenseDto>) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val token = ApiClient.getToken()
+                if (token != null) {
+                    val response = apiService.addExpense(token, expenseDto)
+                    if (response.isSuccessful) {
+                        onResult(Result.success(response.body()!!))
+                    } else {
+                        val errorBody = response.errorBody()?.string()
+                        onResult(Result.failure(Exception("Failed with code ${response.code()}, error: $errorBody")))
+                    }
+                } else {
+                    onResult(Result.failure(Exception("Token is null")))
+                }
+            } catch (e: HttpException) {
+                onResult(Result.failure(Exception("HTTP error: ${e.message}")))
+            } catch (e: ConnectException) {
+                onResult(Result.failure(Exception("Cannot connect to server")))
+            } catch (e: Exception) {
+                onResult(Result.failure(Exception("Error adding expense: $e")))
             }
         }
     }

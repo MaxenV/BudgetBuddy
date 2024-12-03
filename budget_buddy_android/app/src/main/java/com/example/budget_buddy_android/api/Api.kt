@@ -41,13 +41,22 @@ interface ApiService {
     suspend fun register(@Body registerRequest: RegisterRequest): Response<RegisterRequest>
 
     @POST("/auth/login")
-    suspend fun login(@Body login: LoginRequest ): Response<LoginResponse>
+    suspend fun login(@Body login: LoginRequest): Response<LoginResponse>
 
     @GET("/expense/all")
     suspend fun allExpenses(@Header("Authorization") token: String): Response<List<Expense>>
 
     @GET("/expense/{id}")
-    suspend fun singleExpense(@Header("Authorization") token: String, @Path("id") id: Int): Response<Expense>
+    suspend fun singleExpense(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): Response<Expense>
+
+    @POST("/expense/add")
+    suspend fun addExpense(
+        @Header("Authorization") token: String,
+        @Body expense: ExpenseDto
+    ): Response<ExpenseDto>
 
     @PUT("/expense/{id}")
     suspend fun updateExpense(
