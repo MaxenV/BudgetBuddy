@@ -10,4 +10,8 @@ sealed class Screen (
         fun createRoute(expenseId: Int) = "detail_screen/$expenseId"
     }
     object AddExpenseScreen: Screen("add_expense")
+    object AdminDashboardScreen: Screen("admin_dashboard")
+    object UserDetailScreen : Screen("detail_screen/{userId}") {
+        fun createRoute(userId: Int) = "detail_screen/$userId"
+    }
 }

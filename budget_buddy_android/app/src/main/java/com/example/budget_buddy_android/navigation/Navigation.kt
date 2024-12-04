@@ -1,13 +1,11 @@
 package com.example.budget_buddy_android.navigation
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.budget_buddy_android.admin_panel.AdminDashboardView
 import com.example.budget_buddy_android.api.ExpensesRepository
 import com.example.budget_buddy_android.api.UserRepository
 import com.example.budget_buddy_android.login_register.LoginView
@@ -15,6 +13,7 @@ import com.example.budget_buddy_android.login_register.RegisterView
 import com.example.budget_buddy_android.dashboard.DashboardView
 import com.example.budget_buddy_android.dashboard.DetailView
 import com.example.budget_buddy_android.dashboard.NewExpenseView
+import com.example.budget_buddy_android.dashboard.UserDetailView
 import com.example.budget_buddy_android.ui.components.TopBar
 
 @Composable
@@ -46,6 +45,17 @@ fun Navigation(
         }
         composable(Screen.AddExpenseScreen.route) {
             NewExpenseView(navController = navController, expenseRepository = expenseRepository)
+        }
+        composable(Screen.AdminDashboardScreen.route) {
+            AdminDashboardView(navController,userRepository)
+        }
+        composable(Screen.UserDetailScreen.route) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getString("userId")?.toInt() ?: 0
+            UserDetailView(
+                userId = userId,
+                navController = navController,
+                userRepository = userRepository
+            )
         }
     }
 }
