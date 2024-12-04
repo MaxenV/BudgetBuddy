@@ -18,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.budget_buddy_android.api.UserRepository
 import com.example.budget_buddy_android.dashboard.UsersTable
 import com.example.budget_buddy_android.ui.components.TopBar
+import com.example.budget_buddy_android.ui.components.TopBarConf
 
 @Composable
 fun AdminDashboardView(
@@ -29,7 +30,11 @@ fun AdminDashboardView(
         viewModel.fetchUsers()
     }
     Scaffold(
-        topBar = { TopBar(navController,"Admin dashboard") }
+        topBar = { TopBar(navController,"Admin dashboard", TopBarConf(
+            navigationBack = false,
+            addExpense = false
+        )
+        ) }
     ) { innerPadding ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

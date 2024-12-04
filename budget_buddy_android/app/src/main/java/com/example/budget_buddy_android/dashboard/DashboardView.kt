@@ -18,6 +18,7 @@ import com.example.budget_buddy_android.api.UserRepository
 import androidx.compose.material3.Surface
 import com.example.budget_buddy_android.navigation.Screen
 import com.example.budget_buddy_android.ui.components.TopBar
+import com.example.budget_buddy_android.ui.components.TopBarConf
 
 @Composable
 fun DashboardView(
@@ -29,7 +30,7 @@ fun DashboardView(
         viewModel.fetchExpenses()
     }
     Scaffold(
-        topBar = { TopBar(navController,"My dashboard") }
+        topBar = { TopBar(navController,"My dashboard", TopBarConf(navigationBack = false)) }
     ) { innerPadding ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

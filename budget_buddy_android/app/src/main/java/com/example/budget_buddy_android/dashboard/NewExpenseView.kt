@@ -19,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.budget_buddy_android.api.ExpensesRepository
 import com.example.budget_buddy_android.models.Expense
 import com.example.budget_buddy_android.ui.components.TopBar
+import com.example.budget_buddy_android.ui.components.TopBarConf
 import java.math.BigDecimal
 import java.util.Date
 
@@ -27,7 +28,10 @@ fun NewExpenseView(navController: NavController, expenseRepository: ExpensesRepo
     val viewModel: NewExpenseViewModel = viewModel()
 
     Scaffold(
-        topBar = { TopBar(navController, "New Expense") }
+        topBar = { TopBar(navController, "New Expense", TopBarConf(
+            addExpense = false
+        )
+        ) }
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             Row(modifier = Modifier.padding(8.dp)) {

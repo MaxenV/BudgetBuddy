@@ -18,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.budget_buddy_android.api.UserRepository
 import com.example.budget_buddy_android.models.Expense
 import com.example.budget_buddy_android.ui.components.TopBar
+import com.example.budget_buddy_android.ui.components.TopBarConf
 import java.math.BigDecimal
 import java.util.Date
 
@@ -31,7 +32,11 @@ fun UserDetailView(
         viewModel.fetchExpense(userId, userRepository)
     }
     Scaffold(
-        topBar = { TopBar(navController, "User details") }
+        topBar = { TopBar(navController, "User details", TopBarConf(
+            navigationBack = false,
+            addExpense = false
+        )
+        ) }
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             Row(modifier = Modifier.padding(8.dp)) {

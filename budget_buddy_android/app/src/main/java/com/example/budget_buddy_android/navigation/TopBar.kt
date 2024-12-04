@@ -14,23 +14,39 @@ import com.example.budget_buddy_android.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(navController: NavController, title:String) {
+fun TopBar(navController: NavController, title:String, config: TopBarConf = TopBarConf()) {
     TopAppBar(
         title = { Text(title) },
         navigationIcon = {
-            IconButton(onClick = { navController.popBackStack() }) {
-                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_back_foreground), contentDescription = "Back")
+            if(config.navigationBack){
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_back_foreground), contentDescription = "Back")
+                }
             }
         },
         actions = {
-            IconButton(onClick = {
-                navController.navigate(Screen.AddExpenseScreen.route)
-            }) {
-                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_add_foreground), contentDescription = "Add Expense")
+
+            if(config.addExpense) {
+                IconButton(onClick = {
+                    navController.navigate(Screen.AddExpenseScreen.route)
+                }) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_add_foreground),
+                        contentDescription = "Add Expense"
+                    )
+                }
             }
-            IconButton(onClick = {  }) {
-                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_logout_foreground), contentDescription = "Logout")
+            if(config.logout){
+                IconButton(onClick = {  }) {
+                    Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_logout_foreground), contentDescription = "Logout")
+                }
             }
         }
     )
 }
+
+data class TopBarConf(
+    val navigationBack: Boolean = true,
+    val addExpense: Boolean = true,
+    val logout: Boolean = true
+)
