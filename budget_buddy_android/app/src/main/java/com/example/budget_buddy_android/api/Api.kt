@@ -4,6 +4,7 @@ import com.example.budget_buddy_android.dto.ExpenseDto
 import com.example.budget_buddy_android.models.Expense
 import com.example.budget_buddy_android.models.LoginRequest
 import com.example.budget_buddy_android.models.LoginResponse
+import com.example.budget_buddy_android.models.LogoutResponse
 import com.example.budget_buddy_android.models.RegisterRequest
 import com.example.budget_buddy_android.models.User
 import retrofit2.Response
@@ -44,6 +45,9 @@ interface ApiService {
 
     @POST("/auth/login")
     suspend fun login(@Body login: LoginRequest): Response<LoginResponse>
+
+    @POST("/auth/logout")
+    suspend fun logout(@Header("Authorization") token: String): Response<LogoutResponse>
 
     @GET("/users/")
     suspend fun allUsers(@Header("Authorization") token: String): Response<List<User>>

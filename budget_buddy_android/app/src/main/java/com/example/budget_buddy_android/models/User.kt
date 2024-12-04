@@ -17,6 +17,10 @@ data class LoginResponse(
     val isAdmin: Boolean
 )
 
+data class LogoutResponse(
+    val message: String
+)
+
 data class User(
     val id: Int,
     val fullName: String,
