@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -26,12 +27,16 @@ import java.util.Date
 @Composable
 fun NewExpenseView(navController: NavController, expenseRepository: ExpensesRepository) {
     val viewModel: NewExpenseViewModel = viewModel()
+    val viewModelScope = viewModel.viewModelScope
 
     Scaffold(
-        topBar = { TopBar(navController, "New Expense", TopBarConf(
-            addExpense = false
-        )
-        ) }
+        topBar = {
+            TopBar(
+                navController, "New Expense", TopBarConf(
+                    addExpense = false
+                ), viewModelScope
+            )
+        }
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             Row(modifier = Modifier.padding(8.dp)) {

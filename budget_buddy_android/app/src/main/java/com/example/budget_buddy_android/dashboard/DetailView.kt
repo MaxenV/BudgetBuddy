@@ -14,6 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -31,82 +32,84 @@ fun DetailView(
 ) {
     val viewModel: DetailViewModel = viewModel()
 
+    val viewModelScope = viewModel.viewModelScope
+
     LaunchedEffect(expenseId) {
         viewModel.fetchExpense(expenseId, expenseRepository)
     }
-Scaffold (
-    topBar = { TopBar(navController,"Details") }
-){ innerPadding->
-    Column(modifier = Modifier.padding(innerPadding)) {
-        Row(modifier = Modifier.padding(8.dp)) {
-            Text("Expense Name: ")
-            if (viewModel.isEditMode.value) {
-                TextField(value = viewModel.expenseName.value,
-                    onValueChange = { name: String -> viewModel.updateExpense(name = name) })
-            } else {
-                Text(viewModel.expenseName.value)
-            }
-        }
-        Row(modifier = Modifier.padding(8.dp)) {
-            Text("Cost: ")
-            if (viewModel.isEditMode.value) {
-                TextField(value = viewModel.cost.value, onValueChange = { cost: String ->
-                    val toBDecimal = BigDecimal(cost) ?: null
-                    viewModel.updateExpense(cost = toBDecimal)
-                })
-            } else {
-                Text(viewModel.cost.value)
-            }
-        }
-        Row(modifier = Modifier.padding(8.dp)) {
-            Text("Category: ")
-            if (viewModel.isEditMode.value) {
-                TextField(value = viewModel.category.value,
-                    onValueChange = { category: String -> viewModel.updateExpense(category = category) })
-            } else {
-                Text(viewModel.category.value)
-            }
-        }
-        Row(modifier = Modifier.padding(8.dp)) {
-            Text("Description: ")
-            if (viewModel.isEditMode.value) {
-                TextField(value = viewModel.description.value,
-                    onValueChange = { description: String -> viewModel.updateExpense(description = description) })
-            } else {
-                Text(viewModel.description.value)
-            }
-        }
-        Row(modifier = Modifier.padding(8.dp)) {
-            Text("Expense Date: ")
-            if (viewModel.isEditMode.value) {
-                DateTimePicker(viewModel = viewModel)
-            } else {
-                Text(viewModel.expenseDateTime)
-            }
-        }
-        Row(modifier = Modifier.padding(8.dp)) {
-            Button(onClick = {
-                if(viewModel.isEditMode.value){
-                    viewModel.saveExpense(expenseRepository)
+    Scaffold(
+        topBar = { TopBar(navController, "Details", viewModelScope = viewModelScope) }
+    ) { innerPadding ->
+        Column(modifier = Modifier.padding(innerPadding)) {
+            Row(modifier = Modifier.padding(8.dp)) {
+                Text("Expense Name: ")
+                if (viewModel.isEditMode.value) {
+                    TextField(value = viewModel.expenseName.value,
+                        onValueChange = { name: String -> viewModel.updateExpense(name = name) })
+                } else {
+                    Text(viewModel.expenseName.value)
                 }
-                viewModel.toggleEditMode()
-            }) {
-                Text(if (viewModel.isEditMode.value) "Save" else "Edit")
             }
-            Button(onClick =  {
-                viewModel.deleteExpense(expenseId, expenseRepository) { result ->
-                    result.onSuccess {
-                        navController.navigate(Screen.DashboardScreen.route)
-                    }.onFailure { exception ->
-                        // Handle Exception
+            Row(modifier = Modifier.padding(8.dp)) {
+                Text("Cost: ")
+                if (viewModel.isEditMode.value) {
+                    TextField(value = viewModel.cost.value, onValueChange = { cost: String ->
+                        val toBDecimal = BigDecimal(cost) ?: null
+                        viewModel.updateExpense(cost = toBDecimal)
+                    })
+                } else {
+                    Text(viewModel.cost.value)
+                }
+            }
+            Row(modifier = Modifier.padding(8.dp)) {
+                Text("Category: ")
+                if (viewModel.isEditMode.value) {
+                    TextField(value = viewModel.category.value,
+                        onValueChange = { category: String -> viewModel.updateExpense(category = category) })
+                } else {
+                    Text(viewModel.category.value)
+                }
+            }
+            Row(modifier = Modifier.padding(8.dp)) {
+                Text("Description: ")
+                if (viewModel.isEditMode.value) {
+                    TextField(value = viewModel.description.value,
+                        onValueChange = { description: String -> viewModel.updateExpense(description = description) })
+                } else {
+                    Text(viewModel.description.value)
+                }
+            }
+            Row(modifier = Modifier.padding(8.dp)) {
+                Text("Expense Date: ")
+                if (viewModel.isEditMode.value) {
+                    DateTimePicker(viewModel = viewModel)
+                } else {
+                    Text(viewModel.expenseDateTime)
+                }
+            }
+            Row(modifier = Modifier.padding(8.dp)) {
+                Button(onClick = {
+                    if (viewModel.isEditMode.value) {
+                        viewModel.saveExpense(expenseRepository)
                     }
+                    viewModel.toggleEditMode()
+                }) {
+                    Text(if (viewModel.isEditMode.value) "Save" else "Edit")
                 }
-            }) {
-                Text("Delete")
+                Button(onClick = {
+                    viewModel.deleteExpense(expenseId, expenseRepository) { result ->
+                        result.onSuccess {
+                            navController.navigate(Screen.DashboardScreen.route)
+                        }.onFailure { exception ->
+                            // Handle Exception
+                        }
+                    }
+                }) {
+                    Text("Delete")
+                }
             }
         }
     }
-}
 
 }
 
