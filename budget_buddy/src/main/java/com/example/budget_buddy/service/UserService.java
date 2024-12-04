@@ -29,6 +29,11 @@ public class UserService {
         return users;
     }
 
+    public User getUser(Integer userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
     @PostConstruct
     public void init() {
         String adminEmail = "admin@example.com";
