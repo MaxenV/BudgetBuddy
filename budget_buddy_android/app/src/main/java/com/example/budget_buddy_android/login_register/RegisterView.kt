@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -31,9 +30,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.budget_buddy_android.api.UserRepository
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import com.example.budget_buddy_android.navigation.Screen
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterView(
     navController: NavController, userRepository: UserRepository
@@ -55,24 +56,68 @@ fun RegisterView(
                 Text("Registration", fontSize = 24.sp, color = Color.White)
                 Spacer(modifier = Modifier.height(10.dp))
 
-                RegisterRow("Full name", viewModel.fullName.value, { viewModel.updateFullName(it) })
-                RegisterRow("Email", viewModel.email.value, { viewModel.updateEmail(it) })
+                OutlinedTextField(
+                    value = viewModel.fullName.value,
+                    onValueChange = { viewModel.updateFullName(it) },
+                    label = { Text("Full name") },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedTextColor = CustomColor.TextWhite,
+                        unfocusedTextColor = CustomColor.TextWhite,
+                        unfocusedLabelColor = CustomColor.TextWhite,
+                        focusedLabelColor = CustomColor.TextWhite,
+                        focusedBorderColor = CustomColor.FocusedWhite
+                    )
+                )
+                OutlinedTextField(
+                    value = viewModel.email.value,
+                    onValueChange = { viewModel.updateEmail(it) },
+                    label = { Text("Email") },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedTextColor = CustomColor.TextWhite,
+                        unfocusedTextColor = CustomColor.TextWhite,
+                        unfocusedLabelColor = CustomColor.TextWhite,
+                        focusedLabelColor = CustomColor.TextWhite,
+                        focusedBorderColor = CustomColor.FocusedWhite
+                    )
+                )
                 Spacer(modifier = Modifier.height(10.dp))
 
-                RegisterRow("Password", viewModel.password.value, { viewModel.updatePassword(it) })
-                RegisterRow("Repeat password",
-                    viewModel.cpassword.value,
-                    { viewModel.updateRPassword(it) })
+                OutlinedTextField(
+                    value = viewModel.password.value,
+                    onValueChange = { viewModel.updatePassword(it) },
+                    label = { Text("Password") },
+                    visualTransformation = PasswordVisualTransformation(),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedTextColor = CustomColor.TextWhite,
+                        unfocusedTextColor = CustomColor.TextWhite,
+                        unfocusedLabelColor = CustomColor.TextWhite,
+                        focusedLabelColor = CustomColor.TextWhite,
+                        focusedBorderColor = CustomColor.FocusedWhite
+                    )
+                )
+                OutlinedTextField(
+                    value = viewModel.cpassword.value,
+                    onValueChange = { viewModel.updateRPassword(it) },
+                    label = { Text("Repeat password") },
+                    visualTransformation = PasswordVisualTransformation(),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedTextColor = CustomColor.TextWhite,
+                        unfocusedTextColor = CustomColor.TextWhite,
+                        unfocusedLabelColor = CustomColor.TextWhite,
+                        focusedLabelColor = CustomColor.TextWhite,
+                        focusedBorderColor = CustomColor.FocusedWhite
+                    )
+                )
 
                 if (viewModel.errorMess.isNotEmpty()) {
                     Text(viewModel.errorMess)
                 }
 
                 Spacer(modifier = Modifier.height(15.dp))
-                Button(onClick = { viewModel.registerUser(userRepository,context) }) {
+                Button(onClick = { viewModel.registerUser(userRepository, context) }) {
                     Text("Register me")
                 }
-                Text(text = "If you have account? Login here",
+                Text(text = "Do you have already an account? Login here",
                     color = Color.White,
                     textDecoration = TextDecoration.Underline,
                     modifier = Modifier
@@ -82,27 +127,6 @@ fun RegisterView(
                         .padding(10.dp))
             }
         }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun RegisterRow(
-    label: String, value: String, onValueChange: (String) -> Unit
-) {
-    Row {
-        OutlinedTextField(
-            value = value,
-            onValueChange = onValueChange,
-            label = { Text(label) },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedTextColor = CustomColor.TextWhite,
-                unfocusedTextColor = CustomColor.TextWhite,
-                unfocusedLabelColor = CustomColor.TextWhite,
-                focusedLabelColor = CustomColor.TextWhite,
-                focusedBorderColor = CustomColor.FocusedWhite
-            )
-        )
     }
 }
 
