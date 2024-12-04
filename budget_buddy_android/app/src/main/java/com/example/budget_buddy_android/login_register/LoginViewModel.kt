@@ -33,10 +33,15 @@ class LoginViewModel : ViewModel() {
 
     fun loginUser(userRepository: UserRepository, context: Context, navController:NavController) {
         val loginRequest = LoginRequest(_email.value, _password.value)
-        userRepository.loginUser(loginRequest, viewModelScope) { result ->
+        userRepository.loginUser(loginRequest, viewModelScope) { result, isAdmin ->
             result.onSuccess {
                 Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-                navController.navigate(Screen.DashboardScreen.route)
+                if(isAdmin == true){
+                    navController.navigate(Screen.AdminDashboardScreen.route)
+                }
+                else{
+                    navController.navigate(Screen.DashboardScreen.route)
+                }
             }.onFailure {
                 val mess = it.message ?: "Unknown error"
                 Toast.makeText(context, mess, Toast.LENGTH_SHORT).show()

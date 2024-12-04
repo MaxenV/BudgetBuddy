@@ -1,13 +1,11 @@
 package com.example.budget_buddy_android.navigation
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.budget_buddy_android.admin_panel.AdminDashboardView
 import com.example.budget_buddy_android.api.ExpensesRepository
 import com.example.budget_buddy_android.api.UserRepository
 import com.example.budget_buddy_android.login_register.LoginView
@@ -46,6 +44,9 @@ fun Navigation(
         }
         composable(Screen.AddExpenseScreen.route) {
             NewExpenseView(navController = navController, expenseRepository = expenseRepository)
+        }
+        composable(Screen.AdminDashboardScreen.route) {
+            AdminDashboardView(navController,userRepository)
         }
     }
 }
