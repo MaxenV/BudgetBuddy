@@ -107,4 +107,28 @@ class UserRepository {
         }
     }
 
+    fun fetchUser(viewModelScope: CoroutineScope, userId: Int,  onResult: (Result<User?>) -> Unit){
+        viewModelScope.launch {
+            try {
+                val token = ApiClient.getToken()
+                if (token != null) {
+                    val response = apiService.getUser(token, userId)
+                    if (response.isSuccessful) {
+                        onResult(Result.success(response.body()))
+                    } else {
+                        val errorBody = response.errorBody()?.string()
+                        onResult(Result.failure(Exception("Failed with code ${response.code()}, error: $errorBody")))
+                    }
+                } else {
+                    onResult(Result.failure(Exception("Token is null")))
+                }
+            } catch (e: HttpException) {
+                onResult(Result.failure(Exception("HTTP error: ${e.message}")))
+            } catch (e: ConnectException) {
+                onResult(Result.failure(Exception("Cannot connect to server")))
+            } catch (e: Exception) {
+                onResult(Result.failure(Exception("Error fetching users: $e")))
+            }
+        }
+    }
 }

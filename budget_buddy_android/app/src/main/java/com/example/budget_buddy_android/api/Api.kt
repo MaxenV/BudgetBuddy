@@ -46,7 +46,13 @@ interface ApiService {
     suspend fun login(@Body login: LoginRequest): Response<LoginResponse>
 
     @GET("/users/")
-    suspend fun allUsers(@Header("Authorization") token: String):Response<List<User>>
+    suspend fun allUsers(@Header("Authorization") token: String): Response<List<User>>
+
+    @GET("/users/{id}")
+    suspend fun getUser(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): Response<User>
 
     @GET("/expense/all")
     suspend fun allExpenses(@Header("Authorization") token: String): Response<List<Expense>>
