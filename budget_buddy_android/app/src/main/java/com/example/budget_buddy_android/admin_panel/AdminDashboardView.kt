@@ -16,8 +16,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.budget_buddy_android.api.UserRepository
-import com.example.budget_buddy_android.dashboard.DashboardViewModel
-import com.example.budget_buddy_android.dashboard.ExpenseTable
 import com.example.budget_buddy_android.dashboard.UsersTable
 import com.example.budget_buddy_android.ui.components.TopBar
 
@@ -25,13 +23,13 @@ import com.example.budget_buddy_android.ui.components.TopBar
 fun AdminDashboardView(
     navController: NavController, userRepository: UserRepository
 ) {
-    val viewModel: DashboardViewModel = viewModel()
+    val viewModel: AdminViewModel = viewModel()
 
     LaunchedEffect(Unit) {
-        viewModel.fetchExpenses()
+        viewModel.fetchUsers()
     }
     Scaffold(
-        topBar = { TopBar(navController,"My dashboard") }
+        topBar = { TopBar(navController,"Admin dashboard") }
     ) { innerPadding ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -40,7 +38,7 @@ fun AdminDashboardView(
             Row(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                UsersTable(users = viewModel.expenses, navController = navController)
+                UsersTable(users = viewModel.users, navController = navController)
             }
         }
     }

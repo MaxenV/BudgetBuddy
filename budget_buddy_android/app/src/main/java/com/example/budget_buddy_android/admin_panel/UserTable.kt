@@ -21,11 +21,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.budget_buddy_android.models.Expense
 import com.example.budget_buddy_android.models.User
 import com.example.budget_buddy_android.navigation.Screen
-import java.math.BigDecimal
-import java.util.Date
 
 @Composable
 fun UsersTable(users: List<User>, navController:NavController) {
@@ -97,7 +94,7 @@ fun UsersTable(users: List<User>, navController:NavController) {
 @Preview
 @Composable
 fun UsersTablePreview(){
-    val expenseList = listOf(
+    val usersList = listOf(
         User( 1,"Admin", "admin@example.com", true, "admin@example.com",
         )
     )
@@ -109,7 +106,7 @@ fun UsersTablePreview(){
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            UsersTable(expenseList,navController)
+            UsersTable(usersList,navController)
         }
     }
 }
