@@ -14,6 +14,7 @@ data class LoginRequest(
 data class LoginResponse(
     val token: String,
     val expiresIn: Int,
+    val isAdmin: Boolean
 )
 
 data class User(

@@ -46,7 +46,7 @@ class UserRepository {
     fun loginUser(
         loginRequest: LoginRequest,
         viewModelScope: CoroutineScope,
-        onResult: (Result<String>) -> Unit
+        onResult: (Result<String>, isAdmin: Boolean?) -> Unit
     ) {
         viewModelScope.launch {
             try {
@@ -55,15 +55,15 @@ class UserRepository {
                     val loginResponse = response.body()
                     if (loginResponse != null) {
                         ApiClient.setToken("Bearer ${loginResponse.token}")
-                        onResult(Result.success("Login successful"))
+                            onResult(Result.success("Login successful"), loginResponse.isAdmin)
                     } else {
-                        onResult(Result.failure(LoginException("Login response is null")))
+                        onResult(Result.failure(LoginException("Login response is null")),null)
                     }
                 } else {
                     if (response.code() == 401) {
-                        onResult(Result.failure(LoginException("Bad email or password")))
+                        onResult(Result.failure(LoginException("Bad email or password")),null)
                     } else {
-                        onResult(Result.failure(LoginException("Unknown error: ${response.code()}")))
+                        onResult(Result.failure(LoginException("Unknown error: ${response.code()}")),null)
                         Log.d(
                             "API", "loggedUser: Login failed with code ${response.code()}, error: ${
                                 response.errorBody()?.string()
@@ -72,12 +72,12 @@ class UserRepository {
                     }
                 }
             } catch (e: HttpException) {
-                onResult(Result.failure(LoginException("HTTP error: ${e.message}")))
+                onResult(Result.failure(LoginException("HTTP error: ${e.message}")),null)
             } catch (e: ConnectException) {
-                onResult(Result.failure(LoginException("Cannot connect to server")))
+                onResult(Result.failure(LoginException("Cannot connect to server")),null)
             } catch (e: Exception) {
                 Log.d("API ERR", "loginUser: $e")
-                onResult(Result.failure(LoginException("Error login request: $e")))
+                onResult(Result.failure(LoginException("Error login request: $e")),null)
             }
         }
     }
