@@ -64,7 +64,7 @@ fun UsersTable(users: List<User>, navController:NavController) {
                         .padding(5.dp, 10.dp)
                         .fillMaxWidth()
                         .clickable {
-                            navController.navigate(Screen.DetailScreen.createRoute(user.id))
+                            navController.navigate(Screen.UserDetailScreen.createRoute(user.id))
                         }
                 ) {
                     Text(

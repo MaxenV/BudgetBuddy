@@ -13,6 +13,7 @@ import com.example.budget_buddy_android.login_register.RegisterView
 import com.example.budget_buddy_android.dashboard.DashboardView
 import com.example.budget_buddy_android.dashboard.DetailView
 import com.example.budget_buddy_android.dashboard.NewExpenseView
+import com.example.budget_buddy_android.dashboard.UserDetailView
 import com.example.budget_buddy_android.ui.components.TopBar
 
 @Composable
@@ -47,6 +48,14 @@ fun Navigation(
         }
         composable(Screen.AdminDashboardScreen.route) {
             AdminDashboardView(navController,userRepository)
+        }
+        composable(Screen.UserDetailScreen.route) { backStackEntry ->
+            val userId = backStackEntry.arguments?.getString("userId")?.toInt() ?: 0
+            UserDetailView(
+                userId = userId,
+                navController = navController,
+                userRepository = userRepository
+            )
         }
     }
 }
