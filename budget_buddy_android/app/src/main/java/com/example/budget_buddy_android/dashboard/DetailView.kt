@@ -12,6 +12,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
@@ -53,12 +54,16 @@ fun DetailView(
             Row(modifier = Modifier.padding(8.dp)) {
                 Text("Cost: ")
                 if (viewModel.isEditMode.value) {
-                    TextField(value = viewModel.cost.value, onValueChange = { cost: String ->
-                        val toBDecimal = BigDecimal(cost) ?: null
-                        viewModel.updateExpense(cost = toBDecimal)
-                    })
+                    TextField(value = viewModel.costString.value,
+                        onValueChange = { cost: String ->
+                            if (viewModel.costFilter(cost)) {
+                                viewModel.costString.value = cost
+                                viewModel.updateExpense(cost = cost)
+                            }
+                        },
+                        modifier = Modifier.onFocusChanged { viewModel.onCostFocusChange() })
                 } else {
-                    Text(viewModel.cost.value)
+                    Text(viewModel.costString.value)
                 }
             }
             Row(modifier = Modifier.padding(8.dp)) {
