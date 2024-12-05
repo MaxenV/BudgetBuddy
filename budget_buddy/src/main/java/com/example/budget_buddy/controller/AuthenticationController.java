@@ -3,11 +3,13 @@ package com.example.budget_buddy.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.budget_buddy.dto.LoginResponse;
 import com.example.budget_buddy.dto.LoginUserDto;
+import com.example.budget_buddy.dto.LogoutResponse;
 import com.example.budget_buddy.dto.RegisterUserDto;
 import com.example.budget_buddy.model.User;
 import com.example.budget_buddy.service.AuthenticationService;
@@ -43,5 +45,16 @@ public class AuthenticationController {
 
         loginResponse.setIsAdmin(authenticatedUser.getIsAdmin());
         return ResponseEntity.ok(loginResponse);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<LogoutResponse> logout(@RequestHeader("Authorization") String token) {
+        if (token != null && token.startsWith("Bearer ")) {
+            String jwt = token.substring(7);
+            jwtService.invalidateToken(jwt);
+        }
+        System.out.println("User logged out successfully");
+
+        return ResponseEntity.ok(new LogoutResponse("User logged out successfully"));
     }
 }
