@@ -110,11 +110,11 @@ fun RegisterView(
                 )
 
                 if (viewModel.errorMess.isNotEmpty()) {
-                    Text(viewModel.errorMess)
+                    Text(viewModel.errorMess, color = Color.Red)
                 }
 
                 Spacer(modifier = Modifier.height(15.dp))
-                Button(onClick = { viewModel.registerUser(userRepository, context) }) {
+                Button(onClick = { viewModel.registerUser(userRepository, context,navController) }) {
                     Text("Register me")
                 }
                 Text(text = "Do you have already an account? Login here",
