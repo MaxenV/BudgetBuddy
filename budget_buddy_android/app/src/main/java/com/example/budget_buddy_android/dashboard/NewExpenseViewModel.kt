@@ -1,5 +1,7 @@
 package com.example.budget_buddy_android.dashboard
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -7,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.budget_buddy_android.api.ExpensesRepository
+import com.example.budget_buddy_android.dashboard.helpers.validateExpenseDto
 import com.example.budget_buddy_android.dto.ExpenseDto
 import com.example.budget_buddy_android.navigation.Screen
 import kotlinx.coroutines.launch
@@ -60,13 +63,21 @@ class NewExpenseViewModel : ViewModel() {
         costString.value = _currentExpense.value.cost.toString()
     }
 
-    fun addExpense(expensesRepository: ExpensesRepository, navController: NavController) {
+    fun addExpense(expensesRepository: ExpensesRepository, navController: NavController, context: Context) {
         viewModelScope.launch {
+            try {
+                validateExpenseDto(_currentExpense.value)
+            }catch (e: IllegalArgumentException){
+                Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                return@launch
+            }
+
             expensesRepository.addExpense(viewModelScope, _currentExpense.value) { result ->
                 result.onSuccess { addedExpense ->
                     navController.navigate(Screen.DashboardScreen.route)
                 }.onFailure { exception ->
-                    // Handle error
+                    val errMessage = exception.message?.substringAfter("error:") ?: "Some field is empty"
+                    Toast.makeText(context, errMessage, Toast.LENGTH_SHORT).show()
                 }
             }
         }

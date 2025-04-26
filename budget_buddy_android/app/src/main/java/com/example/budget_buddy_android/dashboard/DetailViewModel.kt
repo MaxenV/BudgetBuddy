@@ -1,6 +1,8 @@
 package com.example.budget_buddy_android.dashboard
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -9,6 +11,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.budget_buddy_android.api.ExpensesRepository
+import com.example.budget_buddy_android.dashboard.helpers.validateExpenseDto
 import com.example.budget_buddy_android.dto.ExpenseDto
 import com.example.budget_buddy_android.models.Expense
 import kotlinx.coroutines.launch
@@ -22,8 +25,9 @@ class DetailViewModel : ViewModel() {
 
     val isEditMode = mutableStateOf(false)
     private var _currentExpense = mutableStateOf<Expense?>(null)
-    val costString = mutableStateOf("")
 
+    val costString = mutableStateOf("0.00")
+    val costBigDecimal: State<BigDecimal> = derivedStateOf {  _currentExpense.value?.cost ?: BigDecimal(0) }
     val expenseName: State<String> = derivedStateOf { _currentExpense.value?.expenseName ?: "" }
     val category: State<String> = derivedStateOf { _currentExpense.value?.category ?: "" }
     val description: State<String> = derivedStateOf { _currentExpense.value?.description ?: "" }
@@ -42,14 +46,15 @@ class DetailViewModel : ViewModel() {
         } ?: ""
     }
 
-    fun fetchExpense(expenseId: Int, expensesRepository: ExpensesRepository) {
+    fun fetchExpense(expenseId: Int, expensesRepository: ExpensesRepository, context: Context) {
         viewModelScope.launch {
             expensesRepository.fetchSingleExpense(viewModelScope, expenseId) { result ->
                 result.onSuccess { expense ->
                     _currentExpense.value = expense
                     expenseDateTime = formatExpenseDateTime(_currentExpense.value?.expenseDateTime)
+                    costString.value = expense.cost.toString()
                 }.onFailure { exception ->
-                    // Handle the error appropriately
+                    Toast.makeText(context, "Error while loading date from server", Toast.LENGTH_SHORT)
                 }
             }
         }
@@ -63,6 +68,11 @@ class DetailViewModel : ViewModel() {
         dateTime: Date? = _currentExpense.value?.expenseDateTime,
     ) {
         if (name != null && cost != null && category != null && description != null && dateTime != null) {
+            if (!costFilter(cost)) {
+                return
+            }
+            costString.value = cost
+
             val toBDecimal = if (cost.isEmpty() || cost == ".") BigDecimal.ZERO else BigDecimal(cost)
             _currentExpense.value = _currentExpense.value?.copy(
                 expenseName = name,
@@ -83,23 +93,30 @@ class DetailViewModel : ViewModel() {
         costString.value = _currentExpense.value?.cost.toString()
     }
 
-    fun saveExpense(expensesRepository: ExpensesRepository) {
+    fun saveExpense(expensesRepository: ExpensesRepository, context:Context) {
         if (_currentExpense.value != null) {
             _currentExpense.value?.let { expense ->
                 val expenseDto = ExpenseDto(expense)
                 viewModelScope.launch {
-                    Log.d("EXPENSE", "saveExpense: ${expense}")
+                    try {
+                        validateExpenseDto(expenseDto)
+                    } catch (e: IllegalArgumentException) {
+                        Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                        return@launch
+                    }
                     expensesRepository.updateExpense(
                         viewModelScope,
                         expense.id,
                         expenseDto
                     ) { result ->
                         result.onSuccess { updatedExpense ->
+                            toggleEditMode()
                         }.onFailure { exception ->
-                            // Handle the error appropriately
+                            val errMessage = exception.message?.substringAfter("error:") ?: "Some field is empty"
+                            Toast.makeText(context, errMessage, Toast.LENGTH_SHORT).show()
                         }
                     }
-                }
+                } 
             }
         }
     }
@@ -118,5 +135,8 @@ class DetailViewModel : ViewModel() {
 
     fun toggleEditMode() {
         isEditMode.value = !isEditMode.value
+        if (costString.value.isBlank()){
+            costString.value = "0.00"
+        }
     }
 }
