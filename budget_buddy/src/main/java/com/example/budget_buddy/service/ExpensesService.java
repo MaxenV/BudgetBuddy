@@ -24,12 +24,20 @@ public class ExpensesService {
         this.userRepository = userRepository;
     }
 
+    private void validateExpense(Expense expense) throws IllegalAccessException {
+        if (expense.getExpenseName() == null || expense.getExpenseName().isEmpty())
+            throw new IllegalAccessException("Expense name cannot be empty");
+        if (expense.getCategory() == null || expense.getCategory().isEmpty())
+            throw new IllegalAccessException("Expense category cannot be empty");
+    }
+
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return (User) authentication.getPrincipal();
     }
 
-    public Expense addExpense(Expense expense) {
+    public Expense addExpense(Expense expense) throws IllegalAccessException {
+        validateExpense(expense);
         User user = getCurrentUser();
         expense.setUser(user);
         return expenseRepository.save(expense);

@@ -46,8 +46,14 @@ public class ExpensesController {
     }
 
     @PostMapping("/add")
-    public Expense addExpense(@RequestBody Expense expense) {
-        return expensesService.addExpense(expense);
+    public ResponseEntity<?> addExpense(@RequestBody Expense expense) {
+        try {
+            Expense createExpense = expensesService.addExpense(expense);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createExpense);
+        } catch (IllegalAccessException e) {
+            System.err.println("ERROR while adding an expense: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @GetMapping("/all")
