@@ -38,7 +38,7 @@ fun DetailView(
     val viewModelScope = viewModel.viewModelScope
 
     LaunchedEffect(expenseId) {
-        viewModel.fetchExpense(expenseId, expenseRepository)
+        viewModel.fetchExpense(expenseId, expenseRepository, context)
     }
     Scaffold(
         topBar = { TopBar(navController, "Details", viewModelScope = viewModelScope) }

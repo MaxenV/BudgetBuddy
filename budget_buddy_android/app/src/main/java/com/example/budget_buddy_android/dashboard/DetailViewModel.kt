@@ -46,7 +46,7 @@ class DetailViewModel : ViewModel() {
         } ?: ""
     }
 
-    fun fetchExpense(expenseId: Int, expensesRepository: ExpensesRepository) {
+    fun fetchExpense(expenseId: Int, expensesRepository: ExpensesRepository, context: Context) {
         viewModelScope.launch {
             expensesRepository.fetchSingleExpense(viewModelScope, expenseId) { result ->
                 result.onSuccess { expense ->
@@ -54,7 +54,7 @@ class DetailViewModel : ViewModel() {
                     expenseDateTime = formatExpenseDateTime(_currentExpense.value?.expenseDateTime)
                     costString.value = expense.cost.toString()
                 }.onFailure { exception ->
-                    // Handle the error appropriately
+                    Toast.makeText(context, "Error while loading date from server", Toast.LENGTH_SHORT)
                 }
             }
         }
