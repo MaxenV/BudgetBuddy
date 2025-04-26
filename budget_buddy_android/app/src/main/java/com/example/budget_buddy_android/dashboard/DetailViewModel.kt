@@ -1,6 +1,8 @@
 package com.example.budget_buddy_android.dashboard
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -83,7 +85,7 @@ class DetailViewModel : ViewModel() {
         costString.value = _currentExpense.value?.cost.toString()
     }
 
-    fun saveExpense(expensesRepository: ExpensesRepository) {
+    fun saveExpense(expensesRepository: ExpensesRepository, context:Context) {
         if (_currentExpense.value != null) {
             _currentExpense.value?.let { expense ->
                 val expenseDto = ExpenseDto(expense)
@@ -95,11 +97,13 @@ class DetailViewModel : ViewModel() {
                         expenseDto
                     ) { result ->
                         result.onSuccess { updatedExpense ->
+                            toggleEditMode()
                         }.onFailure { exception ->
-                            // Handle the error appropriately
+                            val errMessage = exception.message?.substringAfter("error:") ?: "Some field is empty"
+                            Toast.makeText(context, errMessage, Toast.LENGTH_SHORT).show()
                         }
                     }
-                }
+                } 
             }
         }
     }
