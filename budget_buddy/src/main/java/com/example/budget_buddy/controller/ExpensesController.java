@@ -30,13 +30,17 @@ public class ExpensesController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ExpenseDto> updateExpense(
+    public ResponseEntity<?> updateExpense(
             @PathVariable Integer id,
             @RequestBody Expense updatedExpense) {
-
-        Expense updated = expensesService.updateExpense(id, updatedExpense);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new ExpenseDto(updated));
+        try {
+            Expense updated = expensesService.updateExpense(id, updatedExpense);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ExpenseDto(updated));
+        } catch (Exception e) {
+            System.err.println("ERROR while editing an expense: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")

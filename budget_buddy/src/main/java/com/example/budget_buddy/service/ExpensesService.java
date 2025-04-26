@@ -115,7 +115,8 @@ public class ExpensesService {
                 .collect(Collectors.toList());
     }
 
-    public Expense updateExpense(Integer expenseId, Expense updatedExpense) {
+    public Expense updateExpense(Integer expenseId, Expense updatedExpense) throws IllegalAccessException {
+        validateExpense(updatedExpense);
         User user = getCurrentUser();
         Expense existingExpense = expenseRepository.findById(expenseId)
                 .orElseThrow(() -> new RuntimeException("Expense not found"));
