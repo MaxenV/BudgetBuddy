@@ -55,3 +55,12 @@ Contributions are welcome! Please fork the repository and submit a pull request.
 
 ## License
 This project is licensed under the MIT License. See the `LICENSE` file for details.
+
+# Android app screenshots
+![image](https://github.com/user-attachments/assets/b651ef1d-a7a8-4157-bdd5-3e08b749839b)
+![image](https://github.com/user-attachments/assets/d6c42590-4f8f-49ea-b156-6775829bcf98)
+![image](https://github.com/user-attachments/assets/fcb1854e-e09c-4e2f-ad2e-2fe78092dcd2)
+![image](https://github.com/user-attachments/assets/7efd3dba-bf77-47d2-bb83-47f9e90863e0)
+![image](https://github.com/user-attachments/assets/982033e3-66eb-4b81-9a05-f3e1d96b2038)
+
+
