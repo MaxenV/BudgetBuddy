@@ -16,20 +16,28 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.budget_buddy_android.api.UserRepository
 import androidx.compose.material3.Surface
+import androidx.lifecycle.viewModelScope
 import com.example.budget_buddy_android.navigation.Screen
 import com.example.budget_buddy_android.ui.components.TopBar
+import com.example.budget_buddy_android.ui.components.TopBarConf
 
 @Composable
 fun DashboardView(
     navController: NavController, userRepository: UserRepository
 ) {
     val viewModel: DashboardViewModel = viewModel()
+    val viewModelScope = viewModel.viewModelScope
 
     LaunchedEffect(Unit) {
         viewModel.fetchExpenses()
     }
     Scaffold(
-        topBar = { TopBar(navController,"My dashboard") }
+        topBar = {
+            TopBar(
+                navController, "My dashboard", TopBarConf(navigationBack = false),
+                viewModelScope
+            )
+        }
     ) { innerPadding ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

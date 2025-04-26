@@ -55,15 +55,18 @@ class UserRepository {
                     val loginResponse = response.body()
                     if (loginResponse != null) {
                         ApiClient.setToken("Bearer ${loginResponse.token}")
-                            onResult(Result.success("Login successful"), loginResponse.isAdmin)
+                        onResult(Result.success("Login successful"), loginResponse.isAdmin)
                     } else {
-                        onResult(Result.failure(LoginException("Login response is null")),null)
+                        onResult(Result.failure(LoginException("Login response is null")), null)
                     }
                 } else {
                     if (response.code() == 401) {
-                        onResult(Result.failure(LoginException("Bad email or password")),null)
+                        onResult(Result.failure(LoginException("Bad email or password")), null)
                     } else {
-                        onResult(Result.failure(LoginException("Unknown error: ${response.code()}")),null)
+                        onResult(
+                            Result.failure(LoginException("Unknown error: ${response.code()}")),
+                            null
+                        )
                         Log.d(
                             "API", "loggedUser: Login failed with code ${response.code()}, error: ${
                                 response.errorBody()?.string()
@@ -72,17 +75,50 @@ class UserRepository {
                     }
                 }
             } catch (e: HttpException) {
-                onResult(Result.failure(LoginException("HTTP error: ${e.message}")),null)
+                onResult(Result.failure(LoginException("HTTP error: ${e.message}")), null)
             } catch (e: ConnectException) {
-                onResult(Result.failure(LoginException("Cannot connect to server")),null)
+                onResult(Result.failure(LoginException("Cannot connect to server")), null)
             } catch (e: Exception) {
                 Log.d("API ERR", "loginUser: $e")
-                onResult(Result.failure(LoginException("Error login request: $e")),null)
+                onResult(Result.failure(LoginException("Error login request: $e")), null)
             }
         }
     }
 
-    fun fetchAllUsers( viewModelScope: CoroutineScope, onResult: (Result<List<User>>) -> Unit) {
+
+    fun logoutUser(
+        viewModelScope: CoroutineScope,
+        onResult: (Result<String>) -> Unit
+    ) {
+        viewModelScope.launch {
+            try {
+                val token = ApiClient.getToken()
+                Log.d("TOKEN", "logoutUser: $token")
+                if (token != null) {
+                    val response = apiService.logout(token)
+                    Log.d("response", "logoutUser: $response")
+                    if (response.isSuccessful) {
+                        onResult(Result.success(response.body()?.message ?: ""))
+                    } else {
+                        Log.d("LOGFAIL", "logoutUser: $response")
+                        val errorBody = response.errorBody()?.string()
+                        onResult(Result.failure(Exception("Failed with code ${response.code()}, error: $errorBody")))
+                    }
+                } else {
+                    onResult(Result.failure(Exception("Token is null")))
+                }
+            } catch (e: HttpException) {
+                onResult(Result.failure(LoginException("HTTP error: ${e.message}")))
+            } catch (e: ConnectException) {
+                onResult(Result.failure(LoginException("Cannot connect to server")))
+            } catch (e: Exception) {
+                Log.d("API ERR", "logoutUser: $e")
+                onResult(Result.failure(LoginException("Error logout request: $e")))
+            }
+        }
+    }
+
+    fun fetchAllUsers(viewModelScope: CoroutineScope, onResult: (Result<List<User>>) -> Unit) {
         viewModelScope.launch {
             try {
                 val token = ApiClient.getToken()
@@ -107,7 +143,7 @@ class UserRepository {
         }
     }
 
-    fun fetchUser(viewModelScope: CoroutineScope, userId: Int,  onResult: (Result<User?>) -> Unit){
+    fun fetchUser(viewModelScope: CoroutineScope, userId: Int, onResult: (Result<User?>) -> Unit) {
         viewModelScope.launch {
             try {
                 val token = ApiClient.getToken()
@@ -128,6 +164,7 @@ class UserRepository {
                 onResult(Result.failure(Exception("Cannot connect to server")))
             } catch (e: Exception) {
                 onResult(Result.failure(Exception("Error fetching users: $e")))
+
             }
         }
     }

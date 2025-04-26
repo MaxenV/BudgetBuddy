@@ -22,9 +22,9 @@ class DetailViewModel : ViewModel() {
 
     val isEditMode = mutableStateOf(false)
     private var _currentExpense = mutableStateOf<Expense?>(null)
+    val costString = mutableStateOf("")
 
     val expenseName: State<String> = derivedStateOf { _currentExpense.value?.expenseName ?: "" }
-    val cost: State<String> = derivedStateOf { _currentExpense.value?.cost?.toString() ?: "" }
     val category: State<String> = derivedStateOf { _currentExpense.value?.category ?: "" }
     val description: State<String> = derivedStateOf { _currentExpense.value?.description ?: "" }
     var expenseDateTime by mutableStateOf(
@@ -57,21 +57,30 @@ class DetailViewModel : ViewModel() {
 
     fun updateExpense(
         name: String? = _currentExpense.value?.expenseName,
-        cost: BigDecimal? = _currentExpense.value?.cost,
+        cost: String? = _currentExpense.value?.cost.toString(),
         category: String? = _currentExpense.value?.category,
         description: String? = _currentExpense.value?.description,
         dateTime: Date? = _currentExpense.value?.expenseDateTime,
     ) {
         if (name != null && cost != null && category != null && description != null && dateTime != null) {
+            val toBDecimal = if (cost.isEmpty() || cost == ".") BigDecimal.ZERO else BigDecimal(cost)
             _currentExpense.value = _currentExpense.value?.copy(
                 expenseName = name,
-                cost = cost,
+                cost = toBDecimal,
                 category = category,
                 description = description,
                 expenseDateTime = dateTime
             )
-            expenseDateTime = formatExpenseDateTime(_currentExpense.value?.expenseDateTime)
         }
+    }
+
+    fun costFilter(cost:String): Boolean{
+        val regex = Regex("^\\d*\\.?\\d{0,2}$")
+        return (regex.matches(cost) || cost.isEmpty() || cost == ".")
+    }
+
+    fun onCostFocusChange(){
+        costString.value = _currentExpense.value?.cost.toString()
     }
 
     fun saveExpense(expensesRepository: ExpensesRepository) {

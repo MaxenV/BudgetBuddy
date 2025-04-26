@@ -18,9 +18,9 @@ import java.util.Locale
 
 class NewExpenseViewModel : ViewModel() {
     private var _currentExpense = mutableStateOf(ExpenseDto())
+    val costString = mutableStateOf(_currentExpense.value.cost.toString())
 
     val expenseName: State<String> = derivedStateOf { _currentExpense.value.expenseName }
-    val cost: State<String> = derivedStateOf { _currentExpense.value.cost.toString() }
     val category: State<String> = derivedStateOf { _currentExpense.value.category }
     val description: State<String> = derivedStateOf { _currentExpense.value.description }
     val expenseDateTime: State<String> = derivedStateOf { _currentExpense.value.expenseDateTime }
@@ -34,20 +34,30 @@ class NewExpenseViewModel : ViewModel() {
 
     fun updateExpense(
         name: String? = _currentExpense.value.expenseName,
-        cost: BigDecimal? = _currentExpense.value.cost,
+        cost: String? = _currentExpense.value.cost.toString(),
         category: String? = _currentExpense.value.category,
         description: String? = _currentExpense.value.description,
         dateTime: String? = _currentExpense.value.expenseDateTime
     ) {
         if (name != null && cost != null && category != null && description != null && dateTime != null) {
-            _currentExpense.value = _currentExpense.value.copy(
-                expenseName = name,
-                cost = cost,
-                category = category,
-                description = description,
-                expenseDateTime = dateTime
-            )
+                    val toBDecimal = if (cost.isEmpty() || cost == ".") BigDecimal.ZERO else BigDecimal(cost)
+                    _currentExpense.value = _currentExpense.value.copy(
+                        expenseName = name,
+                        cost = toBDecimal,
+                        category = category,
+                        description = description,
+                        expenseDateTime = dateTime
+                    )
         }
+    }
+
+    fun costFilter(cost:String): Boolean{
+        val regex = Regex("^\\d*\\.?\\d{0,2}$")
+        return (regex.matches(cost) || cost.isEmpty() || cost == ".")
+    }
+
+    fun onCostFocusChange(){
+        costString.value = _currentExpense.value.cost.toString()
     }
 
     fun addExpense(expensesRepository: ExpensesRepository, navController: NavController) {

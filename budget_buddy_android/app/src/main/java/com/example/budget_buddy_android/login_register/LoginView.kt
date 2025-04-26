@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.example.budget_buddy_android.ui.theme.CustomColor
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -32,9 +33,9 @@ import androidx.navigation.NavController
 import com.example.budget_buddy_android.api.UserRepository
 import com.example.budget_buddy_android.navigation.Screen
 import androidx.navigation.compose.rememberNavController
-import com.example.budget_buddy_android.api.ApiClient
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginView(
     navController: NavController, userRepository: UserRepository
@@ -56,8 +57,36 @@ fun LoginView(
                 Text("Login", fontSize = 24.sp, color = Color.White)
                 Spacer(modifier = Modifier.height(10.dp))
 
-                LoginRow("Email", viewModel.email.value, { viewModel.updateEmail(it) })
-                LoginRow("Password", viewModel.password.value, { viewModel.updatePassword(it) })
+                Row {
+                    OutlinedTextField(
+                        value = viewModel.email.value,
+                        onValueChange = { viewModel.updateEmail(it) },
+                        label = { Text("Email") },
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedTextColor = CustomColor.TextWhite,
+                            unfocusedTextColor = CustomColor.TextWhite,
+                            unfocusedLabelColor = CustomColor.TextWhite,
+                            focusedLabelColor = CustomColor.TextWhite,
+                            focusedBorderColor = CustomColor.FocusedWhite
+                        )
+                    )
+                }
+                Row {
+                    OutlinedTextField(
+                        value = viewModel.password.value,
+                        onValueChange = { viewModel.updatePassword(it) },
+                        label = { Text("Password") },
+                        visualTransformation = PasswordVisualTransformation(),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedTextColor = CustomColor.TextWhite,
+                            unfocusedTextColor = CustomColor.TextWhite,
+                            unfocusedLabelColor = CustomColor.TextWhite,
+                            focusedLabelColor = CustomColor.TextWhite,
+                            focusedBorderColor = CustomColor.FocusedWhite
+                        )
+                    )
+                }
+
                 if (viewModel.errorMess.isNotEmpty()) {
                     Text(viewModel.errorMess)
                 }
@@ -78,28 +107,6 @@ fun LoginView(
         }
     }
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun LoginRow(
-    label: String, value: String, onValueChange: (String) -> Unit
-) {
-    Row {
-        OutlinedTextField(
-            value = value,
-            onValueChange = onValueChange,
-            label = { Text(label) },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedTextColor = CustomColor.TextWhite,
-                unfocusedTextColor = CustomColor.TextWhite,
-                unfocusedLabelColor = CustomColor.TextWhite,
-                focusedLabelColor = CustomColor.TextWhite,
-                focusedBorderColor = CustomColor.FocusedWhite
-            )
-        )
-    }
-}
-
 
 @Preview
 @Composable

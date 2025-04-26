@@ -11,23 +11,33 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.budget_buddy_android.api.ExpensesRepository
 import com.example.budget_buddy_android.models.Expense
 import com.example.budget_buddy_android.ui.components.TopBar
+import com.example.budget_buddy_android.ui.components.TopBarConf
 import java.math.BigDecimal
 import java.util.Date
 
 @Composable
 fun NewExpenseView(navController: NavController, expenseRepository: ExpensesRepository) {
     val viewModel: NewExpenseViewModel = viewModel()
+    val viewModelScope = viewModel.viewModelScope
 
     Scaffold(
-        topBar = { TopBar(navController, "New Expense") }
+        topBar = {
+            TopBar(
+                navController, "New Expense", TopBarConf(
+                    addExpense = false
+                ), viewModelScope
+            )
+        }
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             Row(modifier = Modifier.padding(8.dp)) {
@@ -37,10 +47,14 @@ fun NewExpenseView(navController: NavController, expenseRepository: ExpensesRepo
             }
             Row(modifier = Modifier.padding(8.dp)) {
                 Text("Cost: ")
-                TextField(value = viewModel.cost.value, onValueChange = { cost: String ->
-                    val toBDecimal = BigDecimal(cost) ?: null
-                    viewModel.updateExpense(cost = toBDecimal)
-                })
+                TextField(value = viewModel.costString.value,
+                    onValueChange = { cost: String ->
+                        if (viewModel.costFilter(cost)) {
+                            viewModel.costString.value = cost
+                            viewModel.updateExpense(cost = cost)
+                        }
+                    },
+                    modifier = Modifier.onFocusChanged { viewModel.onCostFocusChange() })
             }
             Row(modifier = Modifier.padding(8.dp)) {
                 Text("Category: ")

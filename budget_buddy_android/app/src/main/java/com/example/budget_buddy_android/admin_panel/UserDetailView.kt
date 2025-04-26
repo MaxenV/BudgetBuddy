@@ -12,12 +12,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.budget_buddy_android.api.UserRepository
 import com.example.budget_buddy_android.models.Expense
 import com.example.budget_buddy_android.ui.components.TopBar
+import com.example.budget_buddy_android.ui.components.TopBarConf
 import java.math.BigDecimal
 import java.util.Date
 
@@ -26,13 +28,16 @@ fun UserDetailView(
     userId: Int, navController: NavController, userRepository: UserRepository
 ) {
     val viewModel: UserDetailViewModel = viewModel()
+    val viewModelScope = viewModel.viewModelScope
 
     LaunchedEffect(userId) {
         viewModel.fetchExpense(userId, userRepository)
     }
-    Scaffold(
-        topBar = { TopBar(navController, "User details") }
-    ) { innerPadding ->
+    Scaffold(topBar = {
+        TopBar(
+            navController, "User details", TopBarConf(addExpense = false), viewModelScope
+        )
+    }) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             Row(modifier = Modifier.padding(8.dp)) {
                 Text("User ID: ")
