@@ -58,14 +58,11 @@ fun DetailView(
                 if (viewModel.isEditMode.value) {
                     TextField(value = viewModel.costString.value,
                         onValueChange = { cost: String ->
-                            if (viewModel.costFilter(cost)) {
-                                viewModel.costString.value = cost
-                                viewModel.updateExpense(cost = cost)
-                            }
-                        },
-                        modifier = Modifier.onFocusChanged { viewModel.onCostFocusChange() })
+                            viewModel.updateExpense(cost = cost)
+                        }
+                    )
                 } else {
-                    Text(viewModel.costString.value)
+                    Text(viewModel.costBigDecimal.value.toString())
                 }
             }
             Row(modifier = Modifier.padding(8.dp)) {

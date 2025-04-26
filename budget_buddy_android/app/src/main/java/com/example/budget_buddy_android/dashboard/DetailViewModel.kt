@@ -25,8 +25,9 @@ class DetailViewModel : ViewModel() {
 
     val isEditMode = mutableStateOf(false)
     private var _currentExpense = mutableStateOf<Expense?>(null)
-    val costString = mutableStateOf("")
 
+    val costString = mutableStateOf("0.00")
+    val costBigDecimal: State<BigDecimal> = derivedStateOf {  _currentExpense.value?.cost ?: BigDecimal(0) }
     val expenseName: State<String> = derivedStateOf { _currentExpense.value?.expenseName ?: "" }
     val category: State<String> = derivedStateOf { _currentExpense.value?.category ?: "" }
     val description: State<String> = derivedStateOf { _currentExpense.value?.description ?: "" }
@@ -51,6 +52,7 @@ class DetailViewModel : ViewModel() {
                 result.onSuccess { expense ->
                     _currentExpense.value = expense
                     expenseDateTime = formatExpenseDateTime(_currentExpense.value?.expenseDateTime)
+                    costString.value = expense.cost.toString()
                 }.onFailure { exception ->
                     // Handle the error appropriately
                 }
@@ -66,6 +68,11 @@ class DetailViewModel : ViewModel() {
         dateTime: Date? = _currentExpense.value?.expenseDateTime,
     ) {
         if (name != null && cost != null && category != null && description != null && dateTime != null) {
+            if (!costFilter(cost)) {
+                return
+            }
+            costString.value = cost
+
             val toBDecimal = if (cost.isEmpty() || cost == ".") BigDecimal.ZERO else BigDecimal(cost)
             _currentExpense.value = _currentExpense.value?.copy(
                 expenseName = name,
@@ -128,5 +135,8 @@ class DetailViewModel : ViewModel() {
 
     fun toggleEditMode() {
         isEditMode.value = !isEditMode.value
+        if (costString.value.isBlank()){
+            costString.value = "0.00"
+        }
     }
 }
