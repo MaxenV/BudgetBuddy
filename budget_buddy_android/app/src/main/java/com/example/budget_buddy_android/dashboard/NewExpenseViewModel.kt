@@ -1,5 +1,7 @@
 package com.example.budget_buddy_android.dashboard
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -60,13 +62,14 @@ class NewExpenseViewModel : ViewModel() {
         costString.value = _currentExpense.value.cost.toString()
     }
 
-    fun addExpense(expensesRepository: ExpensesRepository, navController: NavController) {
+    fun addExpense(expensesRepository: ExpensesRepository, navController: NavController, context: Context) {
         viewModelScope.launch {
             expensesRepository.addExpense(viewModelScope, _currentExpense.value) { result ->
                 result.onSuccess { addedExpense ->
                     navController.navigate(Screen.DashboardScreen.route)
                 }.onFailure { exception ->
-                    // Handle error
+                    val errMessage = exception.message?.substringAfter("error:") ?: "Some field is empty"
+                    Toast.makeText(context, errMessage, Toast.LENGTH_SHORT).show()
                 }
             }
         }
