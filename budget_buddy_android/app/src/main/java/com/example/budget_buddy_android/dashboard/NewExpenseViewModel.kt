@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.budget_buddy_android.api.ExpensesRepository
+import com.example.budget_buddy_android.dashboard.helpers.validateExpenseDto
 import com.example.budget_buddy_android.dto.ExpenseDto
 import com.example.budget_buddy_android.navigation.Screen
 import kotlinx.coroutines.launch
@@ -64,6 +65,13 @@ class NewExpenseViewModel : ViewModel() {
 
     fun addExpense(expensesRepository: ExpensesRepository, navController: NavController, context: Context) {
         viewModelScope.launch {
+            try {
+                validateExpenseDto(_currentExpense.value)
+            }catch (e: IllegalArgumentException){
+                Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                return@launch
+            }
+
             expensesRepository.addExpense(viewModelScope, _currentExpense.value) { result ->
                 result.onSuccess { addedExpense ->
                     navController.navigate(Screen.DashboardScreen.route)

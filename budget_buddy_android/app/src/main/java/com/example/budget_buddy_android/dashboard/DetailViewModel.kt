@@ -11,6 +11,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.budget_buddy_android.api.ExpensesRepository
+import com.example.budget_buddy_android.dashboard.helpers.validateExpenseDto
 import com.example.budget_buddy_android.dto.ExpenseDto
 import com.example.budget_buddy_android.models.Expense
 import kotlinx.coroutines.launch
@@ -90,7 +91,12 @@ class DetailViewModel : ViewModel() {
             _currentExpense.value?.let { expense ->
                 val expenseDto = ExpenseDto(expense)
                 viewModelScope.launch {
-                    Log.d("EXPENSE", "saveExpense: ${expense}")
+                    try {
+                        validateExpenseDto(expenseDto)
+                    } catch (e: IllegalArgumentException) {
+                        Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                        return@launch
+                    }
                     expensesRepository.updateExpense(
                         viewModelScope,
                         expense.id,
