@@ -17,7 +17,7 @@ class LoginViewModel : ViewModel() {
     private var _email = mutableStateOf("user1@example.com") // TODO REMOVE credentials
     var email: State<String> = _email
 
-    private var _password = mutableStateOf("password123")
+    private var _password = mutableStateOf("Password123")
     var password: State<String> = _password
 
     var errorMess by mutableStateOf("")

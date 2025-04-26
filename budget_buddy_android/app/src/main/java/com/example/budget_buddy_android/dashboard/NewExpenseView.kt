@@ -12,6 +12,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
@@ -29,6 +30,7 @@ import java.util.Date
 fun NewExpenseView(navController: NavController, expenseRepository: ExpensesRepository) {
     val viewModel: NewExpenseViewModel = viewModel()
     val viewModelScope = viewModel.viewModelScope
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -72,7 +74,7 @@ fun NewExpenseView(navController: NavController, expenseRepository: ExpensesRepo
             }
             Row(modifier = Modifier.padding(8.dp)) {
                 Button(onClick = {
-                    viewModel.addExpense(expenseRepository, navController)
+                    viewModel.addExpense(expenseRepository, navController, context)
                 }) {
                     Text("Save")
                 }

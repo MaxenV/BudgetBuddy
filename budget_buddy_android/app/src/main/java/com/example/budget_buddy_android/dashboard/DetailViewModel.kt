@@ -1,6 +1,8 @@
 package com.example.budget_buddy_android.dashboard
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -9,6 +11,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.budget_buddy_android.api.ExpensesRepository
+import com.example.budget_buddy_android.dashboard.helpers.validateExpenseDto
 import com.example.budget_buddy_android.dto.ExpenseDto
 import com.example.budget_buddy_android.models.Expense
 import kotlinx.coroutines.launch
@@ -83,23 +86,30 @@ class DetailViewModel : ViewModel() {
         costString.value = _currentExpense.value?.cost.toString()
     }
 
-    fun saveExpense(expensesRepository: ExpensesRepository) {
+    fun saveExpense(expensesRepository: ExpensesRepository, context:Context) {
         if (_currentExpense.value != null) {
             _currentExpense.value?.let { expense ->
                 val expenseDto = ExpenseDto(expense)
                 viewModelScope.launch {
-                    Log.d("EXPENSE", "saveExpense: ${expense}")
+                    try {
+                        validateExpenseDto(expenseDto)
+                    } catch (e: IllegalArgumentException) {
+                        Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                        return@launch
+                    }
                     expensesRepository.updateExpense(
                         viewModelScope,
                         expense.id,
                         expenseDto
                     ) { result ->
                         result.onSuccess { updatedExpense ->
+                            toggleEditMode()
                         }.onFailure { exception ->
-                            // Handle the error appropriately
+                            val errMessage = exception.message?.substringAfter("error:") ?: "Some field is empty"
+                            Toast.makeText(context, errMessage, Toast.LENGTH_SHORT).show()
                         }
                     }
-                }
+                } 
             }
         }
     }
